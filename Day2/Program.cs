@@ -8,89 +8,20 @@ namespace Day2
     {
         static void Main(string[] args)
         {
-            int validInput, inputPosnOne, inputPosnTwo, inputPosnThree, inputValueOne, inputValueTwo;
-            //int count = 0;
-            //int instructionPointer = 0;
-            //int instructionLength = 4;
-            var noun = 0;
-            var verb = 0;
-
-            for (noun=0; noun<100; noun++)
+            var puzzleInput = new List<int>(){1,12,2,3,1,1,2,3,1,3,4,3,1,5,0,3,2,1,9,19,1,19,5,23,2,6,23,27,1,6,27,31,2,31,9,35,1,35,6,39,1,10,39,43,2,9,43,47,1,5,47,51,2,51,6,55,1,5,55,59,2,13,59,63,1,63,5,67,2,67,13,71,1,71,9,75,1,75,6,79,2,79,6,83,1,83,5,87,2,87,9,91,2,9,91,95,1,5,95,99,2,99,13,103,1,103,5,107,1,2,107,111,1,111,5,0,99,2,14,0,0};
+            int instructionPointer = 0;
+            var instructionLength = checkInstruction(puzzleInput[0]);
+            while (instructionLength!=0)
             {
-                for (verb=0; verb<100; verb++)
-                {
-                    var inputNumList = new List<int>(){1,12,2,3,1,1,2,3,1,3,4,3,1,5,0,3,2,1,9,19,1,19,5,23,2,6,23,27,1,6,27,31,2,31,9,35,1,35,6,39,1,10,39,43,2,9,43,47,1,5,47,51,2,51,6,55,1,5,55,59,2,13,59,63,1,63,5,67,2,67,13,71,1,71,9,75,1,75,6,79,2,79,6,83,1,83,5,87,2,87,9,91,2,9,91,95,1,5,95,99,2,99,13,103,1,103,5,107,1,2,107,111,1,111,5,0,99,2,14,0,0};
-                    int count = 0;
-                    int instructionPointer = 0;
-                    int instructionLength = 4;
-                    inputNumList[1] = noun;
-                    inputNumList[2] = verb;
-                    var check = checkIfEndOfProgram(inputNumList[0]);
-                    while (!check)
-                    {
-                        (validInput, inputPosnOne, inputPosnTwo, inputPosnThree) = getFirstFourValues(inputNumList, instructionPointer);
-
-                        inputValueOne = getValueFromPosn(inputNumList, inputPosnOne);
-                        inputValueTwo = getValueFromPosn(inputNumList, inputPosnTwo);
-
-                        int? outputValue;
-                        outputValue = performInstruction(validInput, inputValueOne, inputValueTwo);
-
-                        //Store outputValue in position 4
-                        if (outputValue != null)
-                        {
-                            inputNumList[inputPosnThree] = Convert.ToInt32(outputValue);
-                            //string joined = string.Join(",", inputNumList.ToArray());
-                            //Console.WriteLine(joined);
-                            //Console.WriteLine(inputNumList.Count);
-                        }
-                        count++;
-                        instructionPointer = count*instructionLength;
-                        check = checkIfEndOfProgram(inputNumList[0+instructionPointer]);
-                    }
-
-                    Console.WriteLine("End of program");
-                    Console.WriteLine(string.Join(",", inputNumList.ToArray()));
-                    //return;
-                    if (inputNumList[0] == 19690720)
-                    {
-                        Console.WriteLine("Noun");
-                        Console.WriteLine(noun);
-                        Console.WriteLine("Verb");
-                        Console.WriteLine(verb);
-                        return;
-                    }
-                }
+                var instructionValues = getInputValues(puzzleInput, instructionPointer, instructionLength);
+                performInstruction(instructionValues, puzzleInput);
+                instructionPointer += instructionLength;
+                instructionLength = checkInstruction(puzzleInput[0+instructionPointer]);
             }
-
-            /*var check = checkIfEndOfProgram(inputNumList[0]);
-            while (!check)
-            {
-                (validInput, inputPosnOne, inputPosnTwo, inputPosnThree) = getFirstFourValues(inputNumList, instructionPointer);
-                Console.WriteLine("Validinput");
-
-                inputValueOne = getValueFromPosn(inputNumList, inputPosnOne);
-                inputValueTwo = getValueFromPosn(inputNumList, inputPosnTwo);
-
-                int? outputValue;
-                outputValue = performInstruction(validInput, inputValueOne, inputValueTwo);
-
-                //Store outputValue in position 4
-                if (outputValue != null)
-                {
-                    inputNumList[inputPosnThree] = Convert.ToInt32(outputValue);
-                    string joined = string.Join(",", inputNumList.ToArray());
-                    Console.WriteLine(joined);
-                    Console.WriteLine(inputNumList.Count);
-                }
-                count++;
-                instructionPointer = count*instructionLength;
-                check = checkIfEndOfProgram(inputNumList[0+instructionPointer]);
-            }
-
-            Console.WriteLine("End of program");
-            Console.WriteLine(string.Join(",", inputNumList.ToArray()));
-            return; */
+            
+            Console.WriteLine("Printing out puzzle output");
+            Console.WriteLine(string.Join(",", puzzleInput.ToArray()));
+            return; 
         }
 
         static List<int> getValidInput()
@@ -109,41 +40,55 @@ namespace Day2
             return ids;
         }
 
-        static (int, int, int, int) getFirstFourValues(List<int> inputNumList, int offset)
+        static List<int> getInputValues(List<int> inputNumList, int offset, int length)
         {
-            return (inputNumList[0+offset], inputNumList[1+offset], inputNumList[2+offset], inputNumList[3+offset]);
+            var inputValues = new List<int>();
+            for (int i=0; i<length; i++)
+            {
+                inputValues.Add(inputNumList[i+offset]);
+            }
+            return inputValues;
         }
         
-        static bool checkIfEndOfProgram(int opcode)
+        static int checkInstruction(int opcode)
         {
-            if (opcode == 99)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        static int? performInstruction(int opcode, int inputNumOne, int inputNumTwo)
-        {
-            int outputValue;
             switch(opcode)
             {
                 case 1:
-                    //Console.WriteLine("Addition");
-                    outputValue = inputNumOne + inputNumTwo;
-                    return outputValue;
+                return 4;
+
                 case 2:
-                    //Console.WriteLine("Multiplication");
-                    outputValue = inputNumOne * inputNumTwo;
-                    return outputValue;
+                return 4;
+                
                 case 99:
-                    Console.WriteLine("End of program");
-                    return null;
+                Console.WriteLine("End of program");
+                return 0;
+
                 default:
-                    Console.WriteLine("Unrecognised input");
-                    return null;
+                Console.WriteLine("Error - terminating program");
+                return 0;
+            }
+        }
+        static void performInstruction(List<int> instructionValues, List<int> puzzleInput)  //List<int>
+        {
+            int outputValue, firstInt, secondInt;
+            switch(instructionValues[0])
+            {
+                case 1:  // Addition
+                    firstInt = getValueFromPosn(puzzleInput, instructionValues[1]);
+                    secondInt = getValueFromPosn(puzzleInput, instructionValues[2]);
+                    outputValue = firstInt + secondInt;
+                    // Note to self - using list mutability
+                    puzzleInput[instructionValues[3]] = Convert.ToInt32(outputValue);
+                    return;
+                case 2:  // Multiplication
+                    firstInt = getValueFromPosn(puzzleInput, instructionValues[1]);
+                    secondInt = getValueFromPosn(puzzleInput, instructionValues[2]);
+                    outputValue = firstInt * secondInt;
+                    puzzleInput[instructionValues[3]] = Convert.ToInt32(outputValue);
+                    return;
+                default:
+                    throw new Exception("Unrecognised input");
             }
         }
 
