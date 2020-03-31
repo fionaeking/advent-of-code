@@ -24,22 +24,6 @@ namespace Day2
             return; 
         }
 
-        static List<int> getValidInput()
-        {
-            Console.WriteLine("Enter a comma separated list");
-            var inputString = Console.ReadLine();
-            //TODO - Check if int
-            List<int> ids = inputString.Split(',').Select(int.Parse).ToList();
-            while (ids.Count < 4)
-            {
-                Console.WriteLine("Input is too short");
-                Console.WriteLine("Enter a comma separated list");
-                inputString = Console.ReadLine();
-                ids = inputString.Split(',').Select(int.Parse).ToList();
-            }
-            return ids;
-        }
-
         static List<int> getInputValues(List<int> inputNumList, int offset, int length)
         {
             var inputValues = new List<int>();
@@ -96,8 +80,6 @@ namespace Day2
         {
             return inputNums[input];
         }
-
-
 
     }
 }
