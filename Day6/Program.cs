@@ -19,6 +19,20 @@ namespace Day6
                 orbitTotal += orbitCount(key, orbitingObjects);
             }
             Console.WriteLine(orbitTotal);
+
+            //Part 2
+            //Find starting objects for SAN and YOU
+            //Minimum distance will be at first point parent is the same
+            /*foreach (string key in orbitingObjects.Keys)
+            {
+                Console.WriteLine("Key: " + key);
+                foreach (string val in orbitingObjects[key])
+                {
+                    Console.WriteLine(val);
+                }
+
+            }*/
+            findCommonParent("SAN", "YOU", orbitingObjects);
         }
 
         static Dictionary<string, List<string>> getOrbitsFromFile(string inputFilepath)
@@ -43,6 +57,52 @@ namespace Day6
                 }
             }
             return count;
+        }
+
+        static void findCommonParent(string one, string two, Dictionary<string, List<string>> orbits)
+        {
+            var firstvalue = one;
+            var secondvalue = two;
+
+            var firstParent = findParent(firstvalue, orbits);
+            var secondParent = findParent(secondvalue, orbits);
+            var countOne = 0;
+            while(firstParent!=secondParent)
+            {
+                var countTwo = 0;
+                while (secondParent!="COM")
+                {
+                    if (firstParent == secondParent)
+                    {
+                        Console.WriteLine("The common parent is: " + firstParent);
+                        Console.WriteLine("Count: " + (countOne+countTwo));
+                        return;
+                    }
+                    else
+                    {
+                        secondParent = findParent(secondParent, orbits);
+                    }
+                    countTwo++;
+                }
+
+                firstParent = findParent(firstParent, orbits);
+                secondParent = findParent(secondvalue, orbits);
+                countOne++;
+            }
+        }
+
+        static string findParent(string one, Dictionary<string, List<string>> orbits)
+        {
+            var parent = "";
+            foreach (string key in orbits.Keys)
+            {
+                if (orbits[key].Contains(one))
+                {
+                    parent = key;
+                }
+            }
+            //Console.WriteLine("Parent for " + one + ": " + parent);
+            return parent;
         }
 
     }
