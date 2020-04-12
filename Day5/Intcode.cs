@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 class Intcode {
 
     public static void Run(List<int> puzzleInput)
     {
             int instructionPointer = 0;
-            int outputValue = 0;
+            List<int> outputDiagnosticCodes = new List<int>();
             var opcode = getOpcode(puzzleInput[0]);
             var instructionLength = checkInstruction(opcode);
             while (instructionLength!=0)
@@ -15,12 +16,12 @@ class Intcode {
                 var instructionValues = getInputValues(puzzleInput, instructionPointer, instructionLength);
                 // Get instruction pointer for next loop
                 instructionPointer = getNewInstructionPointer(instructionPointer, instructionLength, opcode);
-                outputValue = performInstruction(opcode, instructionValues, puzzleInput, instructionPointer);
+                instructionPointer = performInstruction(opcode, instructionValues, puzzleInput, instructionPointer, outputDiagnosticCodes);
                 opcode = getOpcode(puzzleInput[0+instructionPointer]);
                 instructionLength = checkInstruction(opcode);
             }
 
-            Console.WriteLine("The diagnostic code is {0}", outputValue);
+            Console.WriteLine("The diagnostic code is {0}", outputDiagnosticCodes.LastOrDefault());
             //Console.WriteLine("Printing out puzzle output");
             //Console.WriteLine(string.Join(",", puzzleInput.ToArray()));
             return; 
@@ -89,7 +90,7 @@ class Intcode {
                 return 0;
             }
         }
-        static int performInstruction(int opcode, List<Tuple<int, int>> instructionValues, List<int> puzzleInput, int instructionPointer)
+        static int performInstruction(int opcode, List<Tuple<int, int>> instructionValues, List<int> puzzleInput, int instructionPointer, List<int> outputDiagnosticCodes)
         {
             int firstInt, secondInt, valueToWrite;
             var outputValue = 0;
@@ -100,20 +101,21 @@ class Intcode {
                     secondInt = getValueFromMode(puzzleInput, instructionValues[1]);
                     // Note to self - using list mutability
                     puzzleInput[instructionValues[2].Item1] = firstInt + secondInt;
-                    return outputValue;
+                    return instructionPointer;
                 case 2:  // Multiplication
                     firstInt = getValueFromMode(puzzleInput, instructionValues[0]);
                     secondInt = getValueFromMode(puzzleInput, instructionValues[1]);
                     puzzleInput[instructionValues[2].Item1] = firstInt * secondInt;
-                    return outputValue;
+                    return instructionPointer;
                 case 3:
                     Console.WriteLine("Enter an input value");
                     puzzleInput[instructionValues[0].Item1] = Convert.ToInt32(Console.ReadLine());
-                    return outputValue;
+                    return instructionPointer;
                 case 4:
                     outputValue = getValueFromMode(puzzleInput, instructionValues[0]);
                     Console.WriteLine($"The value is {outputValue}");
-                    return outputValue;
+                    outputDiagnosticCodes.Add(outputValue);
+                    return instructionPointer;
                 case 5:
                     //jump-if-true
                     firstInt = getValueFromMode(puzzleInput, instructionValues[0]);
@@ -121,7 +123,7 @@ class Intcode {
                     {
                         instructionPointer = getValueFromMode(puzzleInput, instructionValues[1]);
                     }
-                    return outputValue;
+                    return instructionPointer;
                 case 6:
                     //jump-if-false: 
                     firstInt = getValueFromMode(puzzleInput, instructionValues[0]);
@@ -129,21 +131,21 @@ class Intcode {
                     {
                         instructionPointer = getValueFromMode(puzzleInput, instructionValues[1]);
                     }
-                    return outputValue;
+                    return instructionPointer;
                 case 7:
                     firstInt = getValueFromMode(puzzleInput, instructionValues[0]);
                     secondInt = getValueFromMode(puzzleInput, instructionValues[1]);
                     valueToWrite = Convert.ToInt32(firstInt < secondInt);
                     puzzleInput[instructionValues[2].Item1] = valueToWrite;
-                    return outputValue;
+                    return instructionPointer;
                 case 8:
                     firstInt = getValueFromMode(puzzleInput, instructionValues[0]);
                     secondInt = getValueFromMode(puzzleInput, instructionValues[1]);
                     valueToWrite = Convert.ToInt32(firstInt == secondInt);
                     puzzleInput[instructionValues[2].Item1] = valueToWrite;
-                    return outputValue;
+                    return instructionPointer;
                 default:
-                    return outputValue;
+                    return instructionPointer;
                     //throw new Exception("Unrecognised input");
             }
         }
