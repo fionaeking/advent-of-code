@@ -1,6 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;  
+using System.Collections.Generic;
 using System.Linq;
+
+// Program to check how many different passwords within a given input range meet the set criteria
 
 namespace Day4
 {
@@ -8,53 +10,48 @@ namespace Day4
     {
         static void Main(string[] args)
         {
-            string inputAsString = "125730-579381";
-            (int inputNumFirst, int inputNumLast) = getFirstAndLastNumbers(inputAsString);
-            int currNum;
-            int count = 0;
-
-            for (currNum = inputNumFirst; currNum <= inputNumLast; currNum++)
+            (int inputNumFirst, int inputNumLast) = getFirstAndLastNumbers(Constants.inputString);
+            try
             {
-                bool[] checkVar = new bool[3];
-                checkVar[0] = checkSixDigitNumber(currNum);
-                List<int> listOfInts = convertToListOfDigits(currNum);
-                checkVar[1] = checkAdjDigitsSame(listOfInts);
-                checkVar[2] = checkDigitsNeverDecrease(listOfInts);
-                if (!checkVar.Contains(false))
-                {
-                    count++;
-                }
+                checkRangeIsValid(inputNumFirst, inputNumLast);
             }
+            catch (Exception)
+            {
+                Console.WriteLine("Invalid range - terminating program");
+                return;
+            }
+
+            var count = getMatchingPasswordCount(inputNumFirst, inputNumLast);
             Console.WriteLine($"{count} passwords matched this criteria");
         }
 
         static (int, int) getFirstAndLastNumbers(string inputAsString)
         {
             var inputNum = (inputAsString.Split('-'));
-            int inputNumFirst;
-            int inputNumLast;
-            Int32.TryParse(inputNum[0], out inputNumFirst);
-            Int32.TryParse(inputNum[1], out inputNumLast);
+            Int32.TryParse(inputNum[0], out int inputNumFirst);
+            Int32.TryParse(inputNum[1], out int inputNumLast);
             return (inputNumFirst, inputNumLast);
+        }
+
+        static void checkRangeIsValid(int inputLow, int inputHigh)
+        {
+            var lowCheck = checkSixDigitNumber(inputLow);
+            var highCheck = checkSixDigitNumber(inputHigh);
+            if ((lowCheck && highCheck) == false)
+            {
+                throw new Exception("Invalid range");
+            }
         }
 
         static bool checkSixDigitNumber(int inputNum)
         {
-            if (inputNum < 100000 | inputNum > 999999)
-            {
-                Console.WriteLine("Invalid input");
-                return false;
-            }
-            else
-            {
-                return true;
-            }
+            return 100000 <= inputNum && inputNum <= 999999;
         }
 
         static List<int> convertToListOfDigits(int inputNum)
         {
             List<int> listOfInts = new List<int>();
-            while(inputNum > 0)
+            while (inputNum > 0)
             {
                 listOfInts.Add(inputNum % 10);
                 inputNum = inputNum / 10;
@@ -65,30 +62,30 @@ namespace Day4
 
         static bool checkAdjDigitsSame(List<int> inputNum)
         {
-            for (int i=0; i<5; i++)
+            for (int i = 0; i < 5; i++)
             {
-                if (inputNum[i] == inputNum[i+1])
+                if (inputNum[i] == inputNum[i + 1])
                 {
-                    switch(i)
+                    switch (i)
                     {
                         case 0:
-                        if (inputNum[i] != inputNum[i+2])
-                        {
-                            return true;
-                        }
-                        break;
+                            if (inputNum[i] != inputNum[i + 2])
+                            {
+                                return true;
+                            }
+                            break;
                         case 4:
-                        if (inputNum[i] != inputNum[i-1])
-                        {
-                            return true;
-                        }
-                        break;
+                            if (inputNum[i] != inputNum[i - 1])
+                            {
+                                return true;
+                            }
+                            break;
                         default:
-                        if ((inputNum[i] != inputNum[i+2]) && (inputNum[i] != inputNum[i-1]))
-                        {
-                            return true;
-                        }
-                        break;
+                            if ((inputNum[i] != inputNum[i + 2]) && (inputNum[i] != inputNum[i - 1]))
+                            {
+                                return true;
+                            }
+                            break;
                     }
                 }
             }
@@ -97,14 +94,33 @@ namespace Day4
 
         static bool checkDigitsNeverDecrease(List<int> inputNum)
         {
-            for (int i=0; i<5; i++)
+            for (int i = 0; i < 5; i++)
             {
-                if (inputNum[i+1] < inputNum[i])
+                if (inputNum[i + 1] < inputNum[i])
                 {
                     return false;
                 }
             }
             return true;
+        }
+
+        static int getMatchingPasswordCount(int inputNumFirst, int inputNumLast)
+        {
+            int currNum;
+            int count = 0;
+
+            for (currNum = inputNumFirst; currNum <= inputNumLast; currNum++)
+            {
+                bool[] checkVar = new bool[2];
+                List<int> listOfInts = convertToListOfDigits(currNum);
+                checkVar[0] = checkAdjDigitsSame(listOfInts);
+                checkVar[1] = checkDigitsNeverDecrease(listOfInts);
+                if (!checkVar.Contains(false))
+                {
+                    count++;
+                }
+            }
+            return count;
         }
     }
 }
