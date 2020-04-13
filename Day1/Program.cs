@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;  
 using System.IO;
+using System.Linq;
+
+//Program to calculate fuel required to launch a number of given modules
+//based on their mass.
 
 namespace Day1Puzzle1
 {
@@ -8,10 +12,8 @@ namespace Day1Puzzle1
     {
         static void Main(string[] args)
         {
-            int outputNum;
-            var logFile = File.ReadAllLines("C:/Users/fk/Documents/AdventOfCode/Day1Puzzle1/InputList.txt");
-            var inputNumList = new List<string>(logFile);
-            outputNum = callCalculateFuelConsumption(inputNumList);
+            var inputNumList = File.ReadLines("MassOfModules.txt").ToList();
+            var outputNum = calculateTotalFuelConsumption(inputNumList);
             Console.WriteLine("Fuel consumption: " + outputNum);
         }
 
@@ -30,18 +32,21 @@ namespace Day1Puzzle1
             return original_num - num_to_subtract;
         }
 
-        static int calculateFuelConsumption(int inputNum)
+        static int calculateFuelConsumption(int mass)
         {
-            float varOne;
-            int varTwo, varThree;
-            varOne = divideByNum(inputNum, 3);
-            varTwo = roundDown(varOne);
-            varThree = subtractNum(varTwo, 2);
+            //Finds the fuel required for a module
+            //Takes its mass, divides by three, rounds down and subtracts 2
+            float varOne = divideByNum(mass, 3);
+            int varTwo = roundDown(varOne);
+            int varThree = subtractNum(varTwo, 2);
             return varThree;
         }
 
-        static int callCalculateFuelConsumption(List<string> listOfInputs)
+        static int calculateTotalFuelConsumption(List<string> listOfInputs)
         {
+            //To find total fuel requirement, individually calculate the fuel 
+            //needed for the mass of each module (InputList.txt), then sum together.
+            //Also take into account the mass of the added fuel.
             int count = 0;
             for (int i=0; i<listOfInputs.Count; i++)
             {

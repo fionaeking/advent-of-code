@@ -692,11 +692,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\fk\\Documents\\AdventOfCode\\Day1Puzzle1\\Day1Puzzle1.csproj",
+      "projectUniqueName": "C:\\Users\\fk\\Documents\\advent-of-code\\Day1\\Day1Puzzle1.csproj",
       "projectName": "Day1Puzzle1",
-      "projectPath": "C:\\Users\\fk\\Documents\\AdventOfCode\\Day1Puzzle1\\Day1Puzzle1.csproj",
+      "projectPath": "C:\\Users\\fk\\Documents\\advent-of-code\\Day1\\Day1Puzzle1.csproj",
       "packagesPath": "C:\\Users\\fk\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\fk\\Documents\\AdventOfCode\\Day1Puzzle1\\obj\\",
+      "outputPath": "C:\\Users\\fk\\Documents\\advent-of-code\\Day1\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
