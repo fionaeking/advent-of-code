@@ -43,15 +43,21 @@ namespace Day7
             return listOfInts;
         }
 
-        //TODO/Confession - Took this function off StackOverflow without understanding yet
-        static IEnumerable<IEnumerable<T>> getCombinations<T>(IEnumerable<T> list, int length)
+        //TODO/Confession - Took this function off StackOverflow
+        static IEnumerable<IEnumerable<int>> getCombinations(IEnumerable<int> list, int length)
         {
-            if (length == 1) return list.Select(t => new T[] { t });
-
+            if (length == 1) return list.Select(t => new int[] { t });
+            // Calls itself until length=1
+            // SelectMany() can turn a two-dimensional array into a single sequence of values (i.e. will concatenate)
+            // SelectMany(array => array) would cause the elements of the constituent arrays to be copied into the resultant 
+            // sequence without alteration.
             return getCombinations(list, length - 1)
-                .SelectMany(t => list.Where(e => !t.Contains(e)),
-                    (t1, t2) => t1.Concat(new T[] { t2 }));
+                .SelectMany(x => list.Where(e => !x.Contains(e)),
+                    (t1, t2) => t1.Concat(new int[] { t2 }));
         }
+
+        // where there is an element in the original list that is not contained within the current resulting list
+        // x is elements of the current resulting list
 
     }
 }
