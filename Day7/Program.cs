@@ -18,12 +18,14 @@ namespace Day7
             IEnumerable<IEnumerable<int>> result =
                 getCombinations(Enumerable.Range(0, 5), 5);
 
+            Intcode ampA = new Intcode();
+
             foreach (var phaseSequence in result)
             {
                 outputValue = 0;
                 foreach (var phaseSetting in phaseSequence)
                 {
-                    outputValue = Intcode.Run(puzzleInput, phaseSetting, outputValue);
+                    outputValue = ampA.Run(puzzleInput, phaseSetting, outputValue);
                 }
                 if (outputValue > max)
                 {

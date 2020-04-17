@@ -7,7 +7,7 @@ using System.Linq;
 class Intcode
 {
 
-    public static int Run(List<int> puzzleInput, int phaseSetting, int previousOutputValue)
+    public int Run(List<int> puzzleInput, int phaseSetting, int previousOutputValue)
     {
         int instructionPointer = 0;
         List<int> newInputsToReadIn = new List<int> { phaseSetting, previousOutputValue };
@@ -28,7 +28,7 @@ class Intcode
         return outputDiagnosticCodes.LastOrDefault();
     }
 
-    static List<Tuple<int, int>> getInputValues(List<int> inputNumList, int offset, int length)
+    List<Tuple<int, int>> getInputValues(List<int> inputNumList, int offset, int length)
     {
         var inputValues = new List<Tuple<int, int>>();
 
@@ -45,14 +45,14 @@ class Intcode
         return inputValues;
     }
 
-    static int getOpcode(int instruction)
+    int getOpcode(int instruction)
     {
         // Only select last 2 digits for opcode
         var opcode = instruction % 100;
         return opcode;
     }
 
-    static int checkInstruction(int opcode)
+    int checkInstruction(int opcode)
     {
         // Return length of instruction
         switch (opcode)
@@ -69,7 +69,7 @@ class Intcode
             default: throw new Exception("Error - unrecognised opcode");
         }
     }
-    static int performInstruction(int opcode, int instructionPointer, List<Tuple<int, int>> instructionValues, List<int> puzzleInput, List<int> outputDiagnosticCodes, List<int> newInputsToReadIn)
+    int performInstruction(int opcode, int instructionPointer, List<Tuple<int, int>> instructionValues, List<int> puzzleInput, List<int> outputDiagnosticCodes, List<int> newInputsToReadIn)
     {
         int firstInt, secondInt, valueToWrite;
         var outputValue = 0;
@@ -131,7 +131,7 @@ class Intcode
         }
     }
 
-    static int getValueFromMode(List<int> inputNums, Tuple<int, int> input)
+    int getValueFromMode(List<int> inputNums, Tuple<int, int> input)
     {
         if (input.Item2 == 0)
         {
@@ -143,7 +143,7 @@ class Intcode
         }
     }
 
-    static int getNewInstructionPointer(int instructionPointer, int instructionLength, int opcode)
+    int getNewInstructionPointer(int instructionPointer, int instructionLength, int opcode)
     {
         return instructionPointer += instructionLength;
     }
