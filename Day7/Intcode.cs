@@ -44,13 +44,11 @@ class Intcode
             performInstruction(opcode, instructionValues, newInputValue);
             if (opcode == 4)
             {
-                //Console.WriteLine("Returning " + outputValue + " for name " + name);
-                return outputValue; //outputDiagnosticCodes.LastOrDefault();
+                return outputValue;
             }
             opcode = getOpcode();
             instructionLength = checkInstruction(opcode);
         }
-        //Console.WriteLine("Finished for " + name);
         hasFinished = true;
         return outputValue;
     }
