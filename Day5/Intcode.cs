@@ -6,10 +6,16 @@ using System.Linq;
 
 class Intcode
 {
-
-    public static void Run(List<int> puzzleInput)
+    private int instructionPointer;
+    private List<int> puzzleInput;
+    public Intcode(List<int> inputList)
     {
-        int instructionPointer = 0;
+        instructionPointer = 0;
+        puzzleInput = inputList;
+    }
+
+    public void Run()
+    {
         List<int> outputDiagnosticCodes = new List<int>();
         var opcode = getOpcode(puzzleInput[0]);
         var instructionLength = checkInstruction(opcode);
@@ -18,9 +24,9 @@ class Intcode
             //Get parameter modes for each value in instruction
             var instructionValues = getInputValues(puzzleInput, instructionPointer, instructionLength);
             // Get instruction pointer for next loop
-            instructionPointer = getNewInstructionPointer(instructionPointer, instructionLength, opcode);
-            instructionPointer = performInstruction(opcode, instructionValues, puzzleInput, instructionPointer, outputDiagnosticCodes);
-            opcode = getOpcode(puzzleInput[0 + instructionPointer]);
+            getNewInstructionPointer(instructionLength);
+            performInstruction(opcode, instructionValues, outputDiagnosticCodes);
+            opcode = getOpcode(puzzleInput[instructionPointer]);
             instructionLength = checkInstruction(opcode);
         }
         Console.WriteLine("End of program");
@@ -28,7 +34,7 @@ class Intcode
         return;
     }
 
-    static List<Tuple<int, int>> getInputValues(List<int> inputNumList, int offset, int length)
+    List<Tuple<int, int>> getInputValues(List<int> inputNumList, int offset, int length)
     {
         var inputValues = new List<Tuple<int, int>>();
 
@@ -46,14 +52,14 @@ class Intcode
         return inputValues;
     }
 
-    static int getOpcode(int instruction)
+    int getOpcode(int instruction)
     {
         // Only select last 2 digits for opcode
         var opcode = instruction % 100;
         return opcode;
     }
 
-    static int checkInstruction(int opcode)
+    int checkInstruction(int opcode)
     {
         // Return length of instruction
         switch (opcode)
@@ -70,7 +76,7 @@ class Intcode
             default: throw new Exception("Error - unrecognised opcode");
         }
     }
-    static int performInstruction(int opcode, List<Tuple<int, int>> instructionValues, List<int> puzzleInput, int instructionPointer, List<int> outputDiagnosticCodes)
+    void performInstruction(int opcode, List<Tuple<int, int>> instructionValues, List<int> outputDiagnosticCodes)
     {
         int firstInt, secondInt, valueToWrite;
         var outputValue = 0;
@@ -81,21 +87,21 @@ class Intcode
                 secondInt = getValueFromMode(puzzleInput, instructionValues[1]);
                 // Note to self - using list mutability
                 puzzleInput[instructionValues[2].Item1] = firstInt + secondInt;
-                return instructionPointer;
+                return;
             case 2:  // Multiplication
                 firstInt = getValueFromMode(puzzleInput, instructionValues[0]);
                 secondInt = getValueFromMode(puzzleInput, instructionValues[1]);
                 puzzleInput[instructionValues[2].Item1] = firstInt * secondInt;
-                return instructionPointer;
+                return;
             case 3:
                 Console.WriteLine("Enter an input value");
                 puzzleInput[instructionValues[0].Item1] = Convert.ToInt32(Console.ReadLine());
-                return instructionPointer;
+                return;
             case 4:
                 outputValue = getValueFromMode(puzzleInput, instructionValues[0]);
                 Console.WriteLine($"The value is {outputValue}");
                 outputDiagnosticCodes.Add(outputValue);
-                return instructionPointer;
+                return;
             case 5:
                 //jump-if-true
                 firstInt = getValueFromMode(puzzleInput, instructionValues[0]);
@@ -103,7 +109,7 @@ class Intcode
                 {
                     instructionPointer = getValueFromMode(puzzleInput, instructionValues[1]);
                 }
-                return instructionPointer;
+                return;
             case 6:
                 //jump-if-false: 
                 firstInt = getValueFromMode(puzzleInput, instructionValues[0]);
@@ -111,26 +117,25 @@ class Intcode
                 {
                     instructionPointer = getValueFromMode(puzzleInput, instructionValues[1]);
                 }
-                return instructionPointer;
+                return;
             case 7:
                 firstInt = getValueFromMode(puzzleInput, instructionValues[0]);
                 secondInt = getValueFromMode(puzzleInput, instructionValues[1]);
                 valueToWrite = Convert.ToInt32(firstInt < secondInt);
                 puzzleInput[instructionValues[2].Item1] = valueToWrite;
-                return instructionPointer;
+                return;
             case 8:
                 firstInt = getValueFromMode(puzzleInput, instructionValues[0]);
                 secondInt = getValueFromMode(puzzleInput, instructionValues[1]);
                 valueToWrite = Convert.ToInt32(firstInt == secondInt);
                 puzzleInput[instructionValues[2].Item1] = valueToWrite;
-                return instructionPointer;
+                return;
             default:
-                return instructionPointer;
-                //throw new Exception("Unrecognised input");
+                throw new Exception("Unrecognised input");
         }
     }
 
-    static int getValueFromMode(List<int> inputNums, Tuple<int, int> input)
+    int getValueFromMode(List<int> inputNums, Tuple<int, int> input)
     {
         if (input.Item2 == 0)
         {
@@ -142,9 +147,9 @@ class Intcode
         }
     }
 
-    static int getNewInstructionPointer(int instructionPointer, int instructionLength, int opcode)
+    void getNewInstructionPointer(int instructionLength)
     {
-        return instructionPointer += instructionLength;
+        instructionPointer += instructionLength;
     }
 
 

@@ -9,7 +9,8 @@ namespace Day5
         static void Main(string[] args)
         {
             var puzzleInput = puzzleInputToList(Constants.INPUT_FILENAME);
-            Intcode.Run(puzzleInput);
+            Intcode i = new Intcode(puzzleInput);
+            i.Run();
         }
 
         static List<int> puzzleInputToList(string inputFilePath)
