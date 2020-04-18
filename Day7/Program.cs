@@ -9,23 +9,17 @@ namespace Day7
     {  //0,1,2,3,4
         static void Main(string[] args)
         {
-            int outputValue = 0;
-            var puzzleInput = puzzleInputToList(Constants.INPUT_FILENAME);
+            //var puzzleInput = puzzleInputToList(Constants.INPUT_FILENAME);
             int max = 0;
             IEnumerable<int> phaseSequenceMax = new int[] { };
-
+            int outputValue;
             //var phaseSequence = new List<int>(){0,1,2,3,4};
             IEnumerable<IEnumerable<int>> result =
-                getCombinations(Enumerable.Range(0, 5), 5);
+                getCombinations(Enumerable.Range(5, 5), 5);
 
             foreach (var phaseSequence in result)
             {
-                outputValue = 0;
-                foreach (var phaseSetting in phaseSequence)
-                {
-                    Intcode ampA = new Intcode(puzzleInput);
-                    outputValue = ampA.Run(phaseSetting, outputValue);
-                }
+                outputValue = runFeedbackLoop(phaseSequence);
                 if (outputValue > max)
                 {
                     max = outputValue;
@@ -42,6 +36,38 @@ namespace Day7
             var str = File.ReadLines(inputFilePath).First();
             var listOfInts = str.Split(',').Select(int.Parse).ToList();
             return listOfInts;
+        }
+
+        static int runFeedbackLoop(IEnumerable<int> phaseSequence)
+        {
+            List<int> phaseList = phaseSequence.ToList();
+            int nextOutA;
+            int nextOutB;
+            int nextOutC;
+            int nextOutD;
+            int nextOutE;
+            Intcode ampA = new Intcode("A", phaseList[0]);
+            Intcode ampB = new Intcode("B", phaseList[1]);
+            Intcode ampC = new Intcode("C", phaseList[2]);
+            Intcode ampD = new Intcode("D", phaseList[3]);
+            Intcode ampE = new Intcode("E", phaseList[4]);
+            ampA.puzzleInput = puzzleInputToList(Constants.INPUT_FILENAME);
+            ampB.puzzleInput = puzzleInputToList(Constants.INPUT_FILENAME);
+            ampC.puzzleInput = puzzleInputToList(Constants.INPUT_FILENAME);
+            ampD.puzzleInput = puzzleInputToList(Constants.INPUT_FILENAME);
+            ampE.puzzleInput = puzzleInputToList(Constants.INPUT_FILENAME);
+            nextOutE = 0;
+            while (!ampE.hasFinished)
+            {
+                nextOutA = ampA.Run(nextOutE);
+                nextOutB = ampB.Run(nextOutA);
+                nextOutC = ampC.Run(nextOutB);
+                nextOutD = ampD.Run(nextOutC);
+                nextOutE = ampE.Run(nextOutD);
+                //Console.WriteLine(nextOutE);
+            }
+            //Console.WriteLine(nextOutE);
+            return nextOutE;
         }
 
         //TODO/Confession - Took this function off StackOverflow

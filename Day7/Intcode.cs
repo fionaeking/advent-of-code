@@ -7,31 +7,52 @@ using System.Linq;
 class Intcode
 {
     private int instructionPointer;
-    private List<int> puzzleInput;
-    public Intcode(List<int> inputList)
+    public List<int> puzzleInput;
+    private string name;
+
+    private bool phaseIsSet;
+
+    private int phaseSetting;
+    public Intcode(string ampName, int PhaseSetting)
     {
         instructionPointer = 0;
-        puzzleInput = inputList;
+        //puzzleInput = inputList;
+        hasFinished = false;
+        name = ampName;
+        phaseSetting = PhaseSetting;
+        phaseIsSet = false;
     }
 
-    public int Run(int phaseSetting, int previousOutputValue)
+    public bool hasFinished
     {
-        List<int> newInputsToReadIn = new List<int> { phaseSetting, previousOutputValue };
-        List<int> outputDiagnosticCodes = new List<int>();
-        var opcode = getOpcode(puzzleInput[0]);
+        get;
+        private set;
+    }
+
+    private int outputValue;
+
+    public int Run(int newInputValue)
+    {
+        var opcode = getOpcode();
         var instructionLength = checkInstruction(opcode);
-        while (instructionLength != 0)
+        while (opcode != 99)
         {
             //Get parameter modes for each value in instruction
             var instructionValues = getInputValues(puzzleInput, instructionPointer, instructionLength);
             // Get instruction pointer for next loop
             incrementInstructionPointer(instructionLength);
-            performInstruction(opcode, instructionValues, outputDiagnosticCodes, newInputsToReadIn);
-            opcode = getOpcode(puzzleInput[0 + instructionPointer]);
+            performInstruction(opcode, instructionValues, newInputValue);
+            if (opcode == 4)
+            {
+                //Console.WriteLine("Returning " + outputValue + " for name " + name);
+                return outputValue; //outputDiagnosticCodes.LastOrDefault();
+            }
+            opcode = getOpcode();
             instructionLength = checkInstruction(opcode);
         }
-        //Console.WriteLine("The diagnostic code is {0}", outputDiagnosticCodes.LastOrDefault());
-        return outputDiagnosticCodes.LastOrDefault();
+        //Console.WriteLine("Finished for " + name);
+        hasFinished = true;
+        return outputValue;
     }
 
     List<Tuple<int, int>> getInputValues(List<int> inputNumList, int offset, int length)
@@ -51,8 +72,9 @@ class Intcode
         return inputValues;
     }
 
-    int getOpcode(int instruction)
+    int getOpcode()
     {
+        int instruction = puzzleInput[instructionPointer];
         // Only select last 2 digits for opcode
         var opcode = instruction % 100;
         return opcode;
@@ -75,10 +97,10 @@ class Intcode
             default: throw new Exception("Error - unrecognised opcode");
         }
     }
-    void performInstruction(int opcode, List<Tuple<int, int>> instructionValues, List<int> outputDiagnosticCodes, List<int> newInputsToReadIn)
+    void performInstruction(int opcode, List<Tuple<int, int>> instructionValues, int newInputValue)
     {
         int firstInt, secondInt, valueToWrite;
-        var outputValue = 0;
+        //var outputValue = 0;
         switch (opcode)
         {
             case 1:  // Addition
@@ -93,15 +115,20 @@ class Intcode
                 puzzleInput[instructionValues[2].Item1] = firstInt * secondInt;
                 break;
             case 3:
-                puzzleInput[instructionValues[0].Item1] = newInputsToReadIn[0];
-                newInputsToReadIn.RemoveAt(0);
+                if (!phaseIsSet)
+                {
+                    puzzleInput[instructionValues[0].Item1] = phaseSetting;
+                    phaseIsSet = true;
+                }
+                else
+                {
+                    puzzleInput[instructionValues[0].Item1] = newInputValue;
+                }
                 //Console.WriteLine("Enter an input value");
                 //puzzleInput[instructionValues[0].Item1] = Convert.ToInt32(Console.ReadLine());
                 break;
             case 4:
                 outputValue = getValueFromMode(puzzleInput, instructionValues[0]);
-                Console.WriteLine($"The value is {outputValue}");
-                outputDiagnosticCodes.Add(outputValue);
                 break;
             case 5:
                 //jump-if-true
@@ -122,14 +149,12 @@ class Intcode
             case 7:
                 firstInt = getValueFromMode(puzzleInput, instructionValues[0]);
                 secondInt = getValueFromMode(puzzleInput, instructionValues[1]);
-                valueToWrite = Convert.ToInt32(firstInt < secondInt);
-                puzzleInput[instructionValues[2].Item1] = valueToWrite;
+                puzzleInput[instructionValues[2].Item1] = (firstInt < secondInt) ? 1 : 0;
                 break;
             case 8:
                 firstInt = getValueFromMode(puzzleInput, instructionValues[0]);
                 secondInt = getValueFromMode(puzzleInput, instructionValues[1]);
-                valueToWrite = Convert.ToInt32(firstInt == secondInt);
-                puzzleInput[instructionValues[2].Item1] = valueToWrite;
+                puzzleInput[instructionValues[2].Item1] = (firstInt == secondInt) ? 1 : 0;
                 break;
             default:
                 throw new Exception("Unrecognised input");
