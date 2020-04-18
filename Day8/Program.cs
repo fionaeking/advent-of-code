@@ -14,34 +14,36 @@ namespace Day8
             var tall = 6;
             var layers = getLayers(inputString, width, tall);
 
-            List<char> test = new List<char>();
+            // Part 1
+            // var answer = returnOneTimesTwoDigits(layers);
+            // Console.WriteLine(answer);
 
-            for (int j = 0; j < layers[0].Count; j++)
+            List<char> finalImage = new List<char>();
+
+            for (int str = 0; str < layers[0].Count; str++)
             {
-                for (int k = 0; k < layers[0][0].Length; k++)
+                for (int ch = 0; ch < layers[0][0].Length; ch++)
                 {
-                    for (int i = 0; i < layers.Count; i++)
+                    for (int layer = 0; layer < layers.Count; layer++)
                     {
                         // FIrst 0 - Select list for first layer
                         // Second 0 - Select first string in that list
                         // Third 0 -  Select first character in that string
-                        if (layers[i][j][k] != '2')
+                        if (layers[layer][str][ch] != '2')
                         {
-                            test.Add(layers[i][j][k]);
-                            Console.WriteLine(layers[i][j][k]);
+                            finalImage.Add(layers[layer][str][ch]);
+                            Console.WriteLine(layers[layer][str][ch]);
                             break;
                         }
                     }
                 }
             }
-            string teststring = String.Join("", test);
+            string finalImageAsString = String.Join("", finalImage);
 
-            for (int i = 0; i < teststring.Length; i += width)
+            for (int i = 0; i < finalImageAsString.Length; i += width)
             {
-                Console.WriteLine(teststring.Substring(i, width).Replace('0', ' '));
+                Console.WriteLine(finalImageAsString.Substring(i, width).Replace('0', ' '));
             }
-            //var answer = returnOneTimesTwoDigits(layers);
-            //Console.WriteLine(answer);
         }
 
 
@@ -72,17 +74,17 @@ namespace Day8
             var twoCount = 0;
             var answer = 0;
 
-            foreach (var l in layers)
+            foreach (var layer in layers)
             {
-                foreach (var p in l)
+                foreach (var str in layer)
                 {
-                    foreach (var s in p)
+                    foreach (var ch in str)
                     {
-                        if (s == '0')
+                        if (ch == '0')
                             zeroCount++;
-                        else if (s == '1')
+                        else if (ch == '1')
                             oneCount++;
-                        else if (s == '2')
+                        else if (ch == '2')
                             twoCount++;
                     }
                 }
