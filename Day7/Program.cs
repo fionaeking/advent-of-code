@@ -9,11 +9,9 @@ namespace Day7
     {  //0,1,2,3,4
         static void Main(string[] args)
         {
-            //var puzzleInput = puzzleInputToList(Constants.INPUT_FILENAME);
             int max = 0;
             IEnumerable<int> phaseSequenceMax = new int[] { };
             int outputValue;
-            //var phaseSequence = new List<int>(){0,1,2,3,4};
             IEnumerable<IEnumerable<int>> result =
                 getCombinations(Enumerable.Range(5, 5), 5);
 
@@ -41,36 +39,27 @@ namespace Day7
         static int runFeedbackLoop(IEnumerable<int> phaseSequence)
         {
             List<int> phaseList = phaseSequence.ToList();
-            int nextOutA;
-            int nextOutB;
-            int nextOutC;
-            int nextOutD;
-            int nextOutE;
-            Intcode ampA = new Intcode("A", phaseList[0]);
-            Intcode ampB = new Intcode("B", phaseList[1]);
-            Intcode ampC = new Intcode("C", phaseList[2]);
-            Intcode ampD = new Intcode("D", phaseList[3]);
-            Intcode ampE = new Intcode("E", phaseList[4]);
-            ampA.puzzleInput = puzzleInputToList(Constants.INPUT_FILENAME);
-            ampB.puzzleInput = puzzleInputToList(Constants.INPUT_FILENAME);
-            ampC.puzzleInput = puzzleInputToList(Constants.INPUT_FILENAME);
-            ampD.puzzleInput = puzzleInputToList(Constants.INPUT_FILENAME);
-            ampE.puzzleInput = puzzleInputToList(Constants.INPUT_FILENAME);
-            nextOutE = 0;
-            while (!ampE.hasFinished)
+            int outputSignal;
+            var amps = new List<Intcode>();
+            foreach (var phaseSetting in phaseSequence)
             {
-                nextOutA = ampA.Run(nextOutE);
-                nextOutB = ampB.Run(nextOutA);
-                nextOutC = ampC.Run(nextOutB);
-                nextOutD = ampD.Run(nextOutC);
-                nextOutE = ampE.Run(nextOutD);
-                //Console.WriteLine(nextOutE);
+                Intcode amp = new Intcode("A", phaseSetting);
+                amp.puzzleInput = puzzleInputToList(Constants.INPUT_FILENAME);
+                amps.Add(amp);
             }
-            //Console.WriteLine(nextOutE);
-            return nextOutE;
+            outputSignal = 0;
+            while (!amps[amps.Count - 1].hasFinished)
+            {
+                foreach (var amp in amps)
+                {
+                    outputSignal = amp.Run(outputSignal);
+                }
+            }
+            return outputSignal;
         }
 
-        //TODO/Confession - Took this function off StackOverflow
+
+        //TODO/Confession - Took this function below off StackOverflow...
         static IEnumerable<IEnumerable<int>> getCombinations(IEnumerable<int> list, int length)
         {
             if (length == 1) return list.Select(t => new int[] { t });

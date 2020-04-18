@@ -99,7 +99,7 @@ class Intcode
     }
     void performInstruction(int opcode, List<Tuple<int, int>> instructionValues, int newInputValue)
     {
-        int firstInt, secondInt, valueToWrite;
+        int firstInt, secondInt;
         //var outputValue = 0;
         switch (opcode)
         {
