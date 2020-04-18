@@ -25,7 +25,7 @@ class Intcode
             //Get parameter modes for each value in instruction
             var instructionValues = getInputValues(puzzleInput, instructionPointer, instructionLength);
             // Get instruction pointer for next loop
-            getNewInstructionPointer(instructionLength);
+            incrementInstructionPointer(instructionLength);
             performInstruction(opcode, instructionValues, outputDiagnosticCodes, newInputsToReadIn);
             opcode = getOpcode(puzzleInput[0 + instructionPointer]);
             instructionLength = checkInstruction(opcode);
@@ -138,17 +138,10 @@ class Intcode
 
     int getValueFromMode(List<int> inputNums, Tuple<int, int> input)
     {
-        if (input.Item2 == 0)
-        {
-            return inputNums[input.Item1];
-        }
-        else
-        {
-            return input.Item1;
-        }
+        return (input.Item2 == 0) ? inputNums[input.Item1] : input.Item1;
     }
 
-    void getNewInstructionPointer(int instructionLength)
+    void incrementInstructionPointer(int instructionLength)
     {
         instructionPointer += instructionLength;
     }
