@@ -11,6 +11,14 @@ namespace Day8
             string inputString = File.ReadAllText("Input.txt");
             var width = 25;
             var tall = 6;
+            var layers = getLayers(inputString, width, tall);
+            var answer = returnOneTimesTwoDigits(layers);
+            Console.WriteLine(answer);
+        }
+
+
+        static List<List<string>> getLayers(string inputString, int width, int tall)
+        {
             var layers = new List<List<string>>();
             var firstList = new List<string>();
             var count = 0;
@@ -25,7 +33,11 @@ namespace Day8
                     firstList = new List<string>();
                 }
             }
+            return layers;
+        }
 
+        static int returnOneTimesTwoDigits(List<List<string>> layers)
+        {
             var zeroCount = 0;
             var minCount = Int32.MaxValue;
             var oneCount = 0;
@@ -56,8 +68,8 @@ namespace Day8
                 oneCount = 0;
                 twoCount = 0;
             }
-
-            Console.WriteLine(answer);
+            return answer;
         }
+
     }
 }
