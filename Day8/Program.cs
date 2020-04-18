@@ -9,11 +9,39 @@ namespace Day8
         static void Main(string[] args)
         {
             string inputString = File.ReadAllText("Input.txt");
+            //string inputString = "0222112222120000";
             var width = 25;
             var tall = 6;
             var layers = getLayers(inputString, width, tall);
-            var answer = returnOneTimesTwoDigits(layers);
-            Console.WriteLine(answer);
+
+            List<char> test = new List<char>();
+
+            for (int j = 0; j < layers[0].Count; j++)
+            {
+                for (int k = 0; k < layers[0][0].Length; k++)
+                {
+                    for (int i = 0; i < layers.Count; i++)
+                    {
+                        // FIrst 0 - Select list for first layer
+                        // Second 0 - Select first string in that list
+                        // Third 0 -  Select first character in that string
+                        if (layers[i][j][k] != '2')
+                        {
+                            test.Add(layers[i][j][k]);
+                            Console.WriteLine(layers[i][j][k]);
+                            break;
+                        }
+                    }
+                }
+            }
+            string teststring = String.Join("", test);
+
+            for (int i = 0; i < teststring.Length; i += width)
+            {
+                Console.WriteLine(teststring.Substring(i, width).Replace('0', ' '));
+            }
+            //var answer = returnOneTimesTwoDigits(layers);
+            //Console.WriteLine(answer);
         }
 
 
