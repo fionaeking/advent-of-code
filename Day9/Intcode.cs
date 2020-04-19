@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
-// Intcode computer   //203 was too low
+// Intcode computer 
 
 class Intcode
 {
@@ -47,7 +46,6 @@ class Intcode
     List<Tuple<long, long>> getInputValues(int offset, int length)
     {
         var inputValues = new List<Tuple<long, long>>();
-
         //Check instruction - remove opcode (last 2 digits)
         long instruction = puzzleInput[offset];
         long currDigits = instruction / 100;
@@ -98,71 +96,59 @@ class Intcode
                 throw new Exception("Error - unrecognised opcode");
         }
     }
-    void performInstruction(int opcode, List<Tuple<long, long>> instructionValues)
+
+    void performInstruction(int opcode, List<Tuple<long, long>> instructionInputs)
     {
-        long firstInt, secondInt;
-        int index;
+        long firstInput, secondInput;
         switch (opcode)
         {
             case 1: // Addition
-                firstInt = getValueFromMode(instructionValues[0]);
-                secondInt = getValueFromMode(instructionValues[1]);
-                // Note to self - using list mutability
-                index = getIndexFromMode(instructionValues[2]);
-                increaseComputerMemory(index);
-                puzzleInput[index] = firstInt + secondInt;
+                firstInput = getValueFromMode(instructionInputs[0]);
+                secondInput = getValueFromMode(instructionInputs[1]);
+                updateMemoryLocation(instructionInputs[2], firstInput + secondInput);
                 break;
             case 2: // Multiplication
-                firstInt = getValueFromMode(instructionValues[0]);
-                secondInt = getValueFromMode(instructionValues[1]);
-                index = getIndexFromMode(instructionValues[2]);
-                increaseComputerMemory(index);
-                puzzleInput[index] = firstInt * secondInt;
+                firstInput = getValueFromMode(instructionInputs[0]);
+                secondInput = getValueFromMode(instructionInputs[1]);
+                updateMemoryLocation(instructionInputs[2], firstInput * secondInput);
                 break;
             case 3:
-                //puzzleInput[instructionValues[0].Item1] = newInputValue;
                 Console.WriteLine("Enter an input value");
-                index = getIndexFromMode(instructionValues[0]);
-                increaseComputerMemory(index);
-                puzzleInput[index] = Convert.ToInt64(Console.ReadLine());
+                updateMemoryLocation(instructionInputs[0], Convert.ToInt64(Console.ReadLine()));
                 break;
             case 4:
-                outputValue = getValueFromMode(instructionValues[0]);
+                outputValue = getValueFromMode(instructionInputs[0]);
                 Console.WriteLine(outputValue);
                 break;
             case 5:
                 //jump-if-true
-                firstInt = getValueFromMode(instructionValues[0]);
-                if (firstInt != 0)
+                firstInput = getValueFromMode(instructionInputs[0]);
+                if (firstInput != 0)
                 {
-                    instructionPointer = Convert.ToInt32(getValueFromMode(instructionValues[1]));
+                    instructionPointer = Convert.ToInt32(getValueFromMode(instructionInputs[1]));
                 }
                 break;
             case 6:
                 //jump-if-false: 
-                firstInt = getValueFromMode(instructionValues[0]);
-                if (firstInt == 0)
+                firstInput = getValueFromMode(instructionInputs[0]);
+                if (firstInput == 0)
                 {
-                    instructionPointer = Convert.ToInt32(getValueFromMode(instructionValues[1]));
+                    instructionPointer = Convert.ToInt32(getValueFromMode(instructionInputs[1]));
                 }
                 break;
             case 7:
-                firstInt = getValueFromMode(instructionValues[0]);
-                secondInt = getValueFromMode(instructionValues[1]);
-                index = getIndexFromMode(instructionValues[2]);
-                increaseComputerMemory(index);
-                puzzleInput[index] = (firstInt < secondInt) ? 1 : 0;
+                firstInput = getValueFromMode(instructionInputs[0]);
+                secondInput = getValueFromMode(instructionInputs[1]);
+                updateMemoryLocation(instructionInputs[2], (firstInput < secondInput) ? 1 : 0);
                 break;
             case 8:
-                firstInt = getValueFromMode(instructionValues[0]);
-                secondInt = getValueFromMode(instructionValues[1]);
-                index = getIndexFromMode(instructionValues[2]);
-                increaseComputerMemory(index);
-                puzzleInput[index] = (firstInt == secondInt) ? 1 : 0;
+                firstInput = getValueFromMode(instructionInputs[0]);
+                secondInput = getValueFromMode(instructionInputs[1]);
+                updateMemoryLocation(instructionInputs[2], (firstInput == secondInput) ? 1 : 0);
                 break;
             case 9:
-                firstInt = getValueFromMode(instructionValues[0]);
-                relativeBase += firstInt;
+                firstInput = getValueFromMode(instructionInputs[0]);
+                relativeBase += firstInput;
                 break;
             default:
                 throw new Exception("Unrecognised input");
@@ -187,14 +173,14 @@ class Intcode
 
     int getIndexFromMode(Tuple<long, long> input)
     {
-        if (input.Item2 == 2)
-        {
-            return Convert.ToInt32(input.Item1 + relativeBase);
-        }
-        else
-        {
-            return Convert.ToInt32(input.Item1);
-        }
+        return Convert.ToInt32((input.Item2 == 2) ? (input.Item1 + relativeBase) : input.Item1);
+    }
+
+    void updateMemoryLocation(Tuple<long, long> memoryLocation, long valueToWrite)
+    {
+        int index = getIndexFromMode(memoryLocation);
+        increaseComputerMemory(index);
+        puzzleInput[index] = valueToWrite;
     }
 
     void incrementInstructionPointer(int instructionLength)
