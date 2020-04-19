@@ -101,26 +101,30 @@ class Intcode
     void performInstruction(int opcode, List<Tuple<long, long>> instructionValues)
     {
         long firstInt, secondInt;
+        int index;
         switch (opcode)
         {
             case 1: // Addition
                 firstInt = getValueFromMode(instructionValues[0]);
                 secondInt = getValueFromMode(instructionValues[1]);
                 // Note to self - using list mutability
-                increaseComputerMemory(instructionValues[2].Item1);
-                puzzleInput[getIndexFromMode(instructionValues[2])] = firstInt + secondInt;
+                index = getIndexFromMode(instructionValues[2]);
+                increaseComputerMemory(index);
+                puzzleInput[index] = firstInt + secondInt;
                 break;
             case 2: // Multiplication
                 firstInt = getValueFromMode(instructionValues[0]);
                 secondInt = getValueFromMode(instructionValues[1]);
-                increaseComputerMemory(instructionValues[2].Item1);
-                puzzleInput[getIndexFromMode(instructionValues[2])] = firstInt * secondInt;
+                index = getIndexFromMode(instructionValues[2]);
+                increaseComputerMemory(index);
+                puzzleInput[index] = firstInt * secondInt;
                 break;
             case 3:
                 //puzzleInput[instructionValues[0].Item1] = newInputValue;
                 Console.WriteLine("Enter an input value");
-                increaseComputerMemory(instructionValues[0].Item1);
-                puzzleInput[getIndexFromMode(instructionValues[0])] = Convert.ToInt64(Console.ReadLine());
+                index = getIndexFromMode(instructionValues[0]);
+                increaseComputerMemory(index);
+                puzzleInput[index] = Convert.ToInt64(Console.ReadLine());
                 break;
             case 4:
                 outputValue = getValueFromMode(instructionValues[0]);
@@ -145,14 +149,16 @@ class Intcode
             case 7:
                 firstInt = getValueFromMode(instructionValues[0]);
                 secondInt = getValueFromMode(instructionValues[1]);
-                increaseComputerMemory(instructionValues[2].Item1);
-                puzzleInput[getIndexFromMode(instructionValues[2])] = (firstInt < secondInt) ? 1 : 0;
+                index = getIndexFromMode(instructionValues[2]);
+                increaseComputerMemory(index);
+                puzzleInput[index] = (firstInt < secondInt) ? 1 : 0;
                 break;
             case 8:
                 firstInt = getValueFromMode(instructionValues[0]);
                 secondInt = getValueFromMode(instructionValues[1]);
-                increaseComputerMemory(instructionValues[2].Item1);
-                puzzleInput[getIndexFromMode(instructionValues[2])] = (firstInt == secondInt) ? 1 : 0;
+                index = getIndexFromMode(instructionValues[2]);
+                increaseComputerMemory(index);
+                puzzleInput[index] = (firstInt == secondInt) ? 1 : 0;
                 break;
             case 9:
                 firstInt = getValueFromMode(instructionValues[0]);
