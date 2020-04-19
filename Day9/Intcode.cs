@@ -6,40 +6,29 @@ using System.Collections.Generic;
 class Intcode
 {
     private int instructionPointer;
+    private long outputValue;
     public List<long> puzzleInput;
     private long relativeBase;
     public Intcode(List<long> inputList)
     {
         instructionPointer = 0;
         puzzleInput = inputList;
-        hasFinished = false;
         relativeBase = 0;
     }
-
-    public bool hasFinished
-    {
-        get;
-        private set;
-    }
-
-    private long outputValue;
 
     public long Run()
     {
         var opcode = getOpcode();
-        var instructionLength = checkInstruction(opcode);
         while (opcode != 99)
         {
+            var instructionLength = checkInstruction(opcode);
             //Get parameter modes for each value in instruction
             var instructionValues = getInputValues(instructionPointer, instructionLength);
             // Get instruction pointer for next loop
             incrementInstructionPointer(instructionLength);
             performInstruction(opcode, instructionValues);
             opcode = getOpcode();
-            instructionLength = checkInstruction(opcode);
         }
-        hasFinished = true;
-        //Console.WriteLine (String.Join (",", puzzleInput));
         return outputValue;
     }
 
@@ -120,16 +109,14 @@ class Intcode
                 outputValue = getValueFromMode(instructionInputs[0]);
                 Console.WriteLine(outputValue);
                 break;
-            case 5:
-                //jump-if-true
+            case 5: //jump-if-true
                 firstInput = getValueFromMode(instructionInputs[0]);
                 if (firstInput != 0)
                 {
                     instructionPointer = Convert.ToInt32(getValueFromMode(instructionInputs[1]));
                 }
                 break;
-            case 6:
-                //jump-if-false: 
+            case 6: //jump-if-false: 
                 firstInput = getValueFromMode(instructionInputs[0]);
                 if (firstInput == 0)
                 {
