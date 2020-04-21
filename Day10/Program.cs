@@ -12,28 +12,8 @@ namespace Day10
         {
             // Get asteroid coordinates
             var astrList = readInInput();
-
-            var maxAsteroidCount = 0;
-            Tuple<int, int> bestPos = new Tuple<int, int>(0, 0);
-            foreach (var monitorStation in astrList)
-            {
-                var astrAngleDict = new Dictionary<double, Tuple<int, int>>();
-                foreach (var asteroid in astrList)
-                {
-                    if (asteroid!=monitorStation)
-                    {
-                        var angle = calculateAngle(monitorStation, asteroid);
-                        astrAngleDict[angle] = asteroid;
-                    }
-                }
-                if (astrAngleDict.Count > maxAsteroidCount)
-                {
-                    maxAsteroidCount = astrAngleDict.Count;
-                    bestPos = monitorStation;
-                }
-            }
+            var maxAsteroidCount = getMaxAsteroidCount(astrList);
             Console.WriteLine(maxAsteroidCount);
-            Console.WriteLine(bestPos);
 
         }
 
@@ -56,6 +36,28 @@ namespace Day10
                 lineCount++;
             }
             return astrList;
+        }
+
+        static int getMaxAsteroidCount(List<Tuple<int, int>> astrList){
+            var maxAsteroidCount = 0;
+            //Tuple<int, int> bestPos = new Tuple<int, int>(0, 0);
+            foreach (var monitorStation in astrList)
+            {
+                var astrAngleDict = new Dictionary<double, Tuple<int, int>>();
+                foreach (var asteroid in astrList)
+                {
+                    if (asteroid!=monitorStation)
+                    {
+                        var angle = calculateAngle(monitorStation, asteroid);
+                        astrAngleDict[angle] = asteroid;
+                    }
+                }
+                
+                maxAsteroidCount = Math.Max(astrAngleDict.Count, maxAsteroidCount);
+                    //bestPos = monitorStation;
+                
+            }
+            return maxAsteroidCount;
         }
 
         static double calculateAngle(Tuple<int, int> a, Tuple<int, int> b)
