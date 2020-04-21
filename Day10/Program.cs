@@ -14,7 +14,6 @@ namespace Day10
             var astrList = readInInput();
             var maxAsteroidCount = getMaxAsteroidCount(astrList);
             Console.WriteLine(maxAsteroidCount);
-
         }
 
         static List<Tuple<int, int>> readInInput()
@@ -51,11 +50,9 @@ namespace Day10
                         var angle = calculateAngle(monitorStation, asteroid);
                         astrAngleDict[angle] = asteroid;
                     }
-                }
-                
+                }  
                 maxAsteroidCount = Math.Max(astrAngleDict.Count, maxAsteroidCount);
-                    //bestPos = monitorStation;
-                
+                //bestPos = monitorStation;      
             }
             return maxAsteroidCount;
         }
@@ -64,8 +61,7 @@ namespace Day10
         {
             int nom = b.Item1 - a.Item1;
             int denom = b.Item2 - a.Item2;
-            double fract = (denom==0) ? Math.Sign(nom) : (double)nom/(double)denom;
-            return Math.Atan2(nom, denom) * 180.0 / Math.PI;
+            return Math.Atan2(nom, denom);
         }
     }
 }
