@@ -692,11 +692,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Fiona\\Documents\\GitHub\\advent-of-code\\Day9\\Day7.csproj",
-      "projectName": "Day7",
-      "projectPath": "C:\\Users\\Fiona\\Documents\\GitHub\\advent-of-code\\Day9\\Day7.csproj",
+      "projectUniqueName": "C:\\Users\\Fiona\\Documents\\GitHub\\advent-of-code\\Day10\\Day10.csproj",
+      "projectName": "Day10",
+      "projectPath": "C:\\Users\\Fiona\\Documents\\GitHub\\advent-of-code\\Day10\\Day10.csproj",
       "packagesPath": "C:\\Users\\Fiona\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Fiona\\Documents\\GitHub\\advent-of-code\\Day9\\obj\\",
+      "outputPath": "C:\\Users\\Fiona\\Documents\\GitHub\\advent-of-code\\Day10\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
