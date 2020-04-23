@@ -2,75 +2,46 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Collections;
+using System.Collections.Specialized;
 
 // Monitoring Station
 
-namespace Day10  //1904 was wrong - too low
+namespace Day10
 {
     class Program
     {
         static void Main(string[] args)
         {
-            // Get asteroid coordinates
-            var astrList = readInInput();
-            var maxAsteroidCount = getMaxAsteroidCount(astrList);
-            Tuple<int, int> bestPos = new Tuple<int, int>(20, 21);
-            var asteroidCount = 0;
-            while (asteroidCount<=200)
+            var astrList = readInInput(); // Get asteroids as list of coordinates
+            Tuple<int, int> bestPos = getBestPosition(astrList);
+            var currAsteroidCount = 0;
+            var prevAsteroidCount = 0;
+            List<KeyValuePair<double, Tuple<int, int>>> listAnglesOrdered = new List<KeyValuePair<double, Tuple<int, int>>>();
+            while (currAsteroidCount<=200)
             {
                 var astrAngleDict = new Dictionary<double, Tuple<int, int>>();
                 foreach (var asteroid in astrList)
                 {
                     if (asteroid!=bestPos)
                     {
-                        var angle = calculateAngle(bestPos, asteroid);
-                        //if angle exists, check if the distance is larger
-                        if (astrAngleDict.ContainsKey(angle))
-                        {
-                            astrAngleDict[angle] = closerPoint(bestPos, asteroid, astrAngleDict[angle]);
-                        }
-                        else
-                        {
-                            astrAngleDict[angle] = asteroid;
-                        }
+                        var angle = Utilities.calculateAngle(bestPos, asteroid);
+                        // If angle already exists as dictionary key, check if this point is closer
+                        astrAngleDict[angle] = astrAngleDict.ContainsKey(angle) ? 
+                                                closerPoint(bestPos, asteroid, astrAngleDict[angle]) : asteroid;
                     }
                 }
-                var l = astrAngleDict.OrderBy(key => key.Key);
-                var l2 = l.ToList(); //(valueItem) => valueItem.Value);
-                //var dic = l.ToDictionary((keyItem) => keyItem.Key, (valueItem) => valueItem.Value);
-                if ((asteroidCount+l2.Count)>200)
-                {
-                    Console.WriteLine("yes");
-                    Console.WriteLine(l2[0]);
-                    Console.WriteLine(l2[200 - asteroidCount - 1]);
-                    break;
-                }
-                else
-                {
-                    Console.WriteLine("non");
-                    asteroidCount += l2.Count;
-                    foreach (var val in astrAngleDict.Values)
-                    {
-                        astrList.Remove(val);
-                    }
-                }
-
-
+                listAnglesOrdered = astrAngleDict.OrderBy(key => key.Key).ToList(); // Sort angles in order
+                prevAsteroidCount = currAsteroidCount;
+                currAsteroidCount += listAnglesOrdered.Count;
             }
-            
-
-                //bestPos = monitorStation;      
-        }
-
-        static double getDistance(Tuple<int, int> pointOne, Tuple<int, int> pointTwo)
-        {
-             return Math.Sqrt(Math.Pow((pointTwo.Item1 - pointOne.Item1), 2) + Math.Pow((pointTwo.Item2 - pointOne.Item2), 2));
+            Console.WriteLine($"200th asteroid at: {listAnglesOrdered[200 - prevAsteroidCount - 1].Value}");
         }
 
         static Tuple<int, int> closerPoint(Tuple<int, int> pointOrigin, Tuple<int, int> pointOne, Tuple<int, int> pointTwo)
         {
-            var distOne = getDistance(pointOrigin, pointOne);
-            var distTwo = getDistance(pointOrigin, pointTwo);
+            var distOne = Utilities.getDistance(pointOrigin, pointOne);
+            var distTwo = Utilities.getDistance(pointOrigin, pointTwo);
             return (distOne < distTwo) ? pointOne : pointTwo;
         }
 
@@ -81,21 +52,19 @@ namespace Day10  //1904 was wrong - too low
             int lineCount = 0;
             foreach (var line in inputFile)
             {
-                int charCount = 0;
-                foreach (var ch in line)
+                for (int charCount = 0; charCount<line.Length; charCount++)
                 {
-                    if(ch=='#')
+                    if(line[charCount]=='#')
                     {
                         astrList.Add(new Tuple<int, int>(charCount, lineCount));
                     }
-                    charCount++;
                 }
                 lineCount++;
             }
             return astrList;
         }
 
-        static int getMaxAsteroidCount(List<Tuple<int, int>> astrList){
+        static Tuple<int, int> getBestPosition(List<Tuple<int, int>> astrList){
             var maxAsteroidCount = 0;
             Tuple<int, int> bestPos = new Tuple<int, int>(0, 0);
             foreach (var monitorStation in astrList)
@@ -105,11 +74,10 @@ namespace Day10  //1904 was wrong - too low
                 {
                     if (asteroid!=monitorStation)
                     {
-                        var angle = calculateAngle(monitorStation, asteroid);
+                        var angle = Utilities.calculateAngle(monitorStation, asteroid);
                         astrAngleDict[angle] = asteroid;
                     }
-                }  
-                //maxAsteroidCount = Math.Max(astrAngleDict.Count, maxAsteroidCount);
+                } 
                 if (astrAngleDict.Count > maxAsteroidCount)
                 {
                     maxAsteroidCount = astrAngleDict.Count;
@@ -117,21 +85,9 @@ namespace Day10  //1904 was wrong - too low
                 }
             }
             Console.WriteLine("Max asteroid count: " + maxAsteroidCount);
-            Console.WriteLine(bestPos);
-            return maxAsteroidCount;
+            Console.WriteLine("Best position: " + bestPos);
+            return bestPos;
         }
 
-        static double calculateAngle(Tuple<int, int> a, Tuple<int, int> b)
-        {
-            int nom = a.Item1 - b.Item1;
-            int denom = b.Item2 - a.Item2;
-            var angleToReturn = ( Math.Atan2(nom, denom) * (180 / Math.PI) + 180) % 360;
-           // var angleToReturn = Math.Atan2(nom, denom) * 180/Math.PI;
-            /*if (angleToReturn < 0)
-            {
-                angleToReturn += 360;
-            }*/
-            return angleToReturn;
-        }
     }
 }
