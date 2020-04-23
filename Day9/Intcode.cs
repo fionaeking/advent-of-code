@@ -96,7 +96,7 @@ class Intcode
                 updateMemoryLocation(instructionInputs[0], Convert.ToInt64(Console.ReadLine()));
                 break;
             case 4:
-                Console.WriteLine(firstInput); // Writte value to output
+                Console.WriteLine(firstInput); // Write value to output
                 break;
             case 5: //jump-if-true
                 if (firstInput != 0)
