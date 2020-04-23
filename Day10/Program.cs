@@ -58,6 +58,7 @@ namespace Day10
                     {
                         astrList.Add(new Tuple<int, int>(charCount, lineCount));
                     }
+                    charCount++;
                 }
                 lineCount++;
             }
