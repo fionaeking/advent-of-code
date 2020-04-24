@@ -78,7 +78,7 @@ class Robot
 
     public void printOutPanels()
     {
-        var listAnglesOrdered = panelsPainted.OrderBy(key => key.Key); //.ToDictionary(key => key.Key);
+        var listAnglesOrdered = panelsPainted.OrderByDescending(key => key.Key.Item2).ThenBy(key => key.Key.Item1);; //.ToDictionary(key => key.Key);
         int maxY = 0;
         int minY = 1000;
         int maxX = 0;
@@ -91,65 +91,44 @@ class Robot
             minX = Math.Min(kvp.Key.Item1, minX);
         }
 
-        int prevX = minX;
-        int yCount = minY;
+        foreach (var kvp in listAnglesOrdered)
+        {
+            Console.WriteLine(kvp.Key);
+        }
+
+        int prevY = maxY;
+        int xCount = minX;
         List<List<int>> finalImage = new List<List<int>>();
         List<int> imageLine = new List<int>();
         foreach (var kvp in listAnglesOrdered)
         {
-            if(kvp.Key.Item1!=prevX)
+            if(kvp.Key.Item2!=prevY)
             {
-                //Console.WriteLine(kvp.Key.Item1);
                 //check length of imageLine
                 while (imageLine.Count < (maxX-minX))
                 {
+                    Console.WriteLine("Pad");
                     imageLine.Add(0);
                 }
                 finalImage.Add(imageLine);
                 imageLine = new List<int>();
-                yCount = minY;
-                prevX = kvp.Key.Item1;
+                xCount = minX;
+                prevY = kvp.Key.Item2;
             }
-            while (kvp.Key.Item2 != yCount)
+            while (kvp.Key.Item1 > xCount)
             {
-                imageLine.Add(0); //chcek what default should be
-                yCount++;
+                imageLine.Add(0);
+                xCount++;
             }
             imageLine.Add(kvp.Value);
+            xCount++;
         }
+        finalImage.Add(imageLine);
 
         foreach (var line in finalImage)
         {
             Console.WriteLine(String.Join("", line).Replace('0', ' '));
         }
-        //Console.WriteLine(maxY);
-        
-          /*List<char> finalImage = new List<char>();
-
-            for (int str = 0; str < layers[0].Count; str++)
-            {
-                for (int ch = 0; ch < layers[0][0].Length; ch++)
-                {
-                    for (int layer = 0; layer < layers.Count; layer++)
-                    {
-                        // FIrst 0 - Select list for first layer
-                        // Second 0 - Select first string in that list
-                        // Third 0 -  Select first character in that string
-                        if (layers[layer][str][ch] != '2')
-                        {
-                            finalImage.Add(layers[layer][str][ch]);
-                            Console.WriteLine(layers[layer][str][ch]);
-                            break;
-                        }
-                    }
-                }
-            }
-            string finalImageAsString = String.Join("", finalImage);
-
-            for (int i = 0; i < finalImageAsString.Length; i += width)
-            {
-                Console.WriteLine(finalImageAsString.Substring(i, width).Replace('0', ' '));
-            }*/
     }
    
 }
