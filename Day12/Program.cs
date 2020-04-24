@@ -31,6 +31,7 @@ namespace Day12
 
         static void callUpdateVelocities(List<Moon> moonList)
         {
+            // Todo - this could definitely be more concise
             updateVelocities(moonList[0], moonList[1]);
             updateVelocities(moonList[0], moonList[2]);
             updateVelocities(moonList[0], moonList[3]);
