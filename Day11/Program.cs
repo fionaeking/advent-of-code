@@ -26,7 +26,7 @@ namespace Day11
             
         }
 
-            static List<Int64> puzzleInputToList (string inputFilePath) {
+        static List<Int64> puzzleInputToList (string inputFilePath) {
             var str = File.ReadLines (inputFilePath).First ();
             var listOfInts = str.Split (',').Select (Int64.Parse).ToList ();
             return listOfInts;
