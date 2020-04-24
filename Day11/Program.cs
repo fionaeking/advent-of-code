@@ -12,7 +12,16 @@ namespace Day11
         {
             var puzzleInput = puzzleInputToList (Constants.INPUT_FILENAME);
             Intcode i = new Intcode (puzzleInput);
-            i.Run ();
+            Robot r = new Robot();
+            while (!i.hasFinished)
+            {
+                var firstOutput = i.Run ();
+                var secondOutput = i.Run();
+                // We can convert as the values will only be 0 or 1
+                i.nextInput = r.newPointandDirection(Convert.ToInt32(firstOutput), Convert.ToInt32(secondOutput));
+            }
+            Console.WriteLine("Number of panels painted: " + r.getNumberPanelsPainted());
+            
         }
 
             static List<Int64> puzzleInputToList (string inputFilePath) {

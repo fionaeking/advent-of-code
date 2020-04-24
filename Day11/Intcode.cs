@@ -7,15 +7,19 @@ class Intcode
 {
     private int instructionPointer;
     public List<long> puzzleInput;
+    public long outputValue;
     private long relativeBase;
+    public bool hasFinished;
+    public int nextInput;
     public Intcode(List<long> inputList)
     {
         instructionPointer = 0;
         puzzleInput = inputList;
         relativeBase = 0;
+        hasFinished = false;
     }
 
-    public void Run()
+    public long Run()
     {
         var opcode = getOpcode();
         while (opcode != 99)
@@ -26,8 +30,14 @@ class Intcode
             // Get instruction pointer for next loop
             incrementInstructionPointer(instructionLength);
             performInstruction(opcode, instructionValues);
+            if (opcode == 4)
+            {
+                return outputValue;
+            }
             opcode = getOpcode();
         }
+        hasFinished = true;
+        return outputValue;
     }
 
     List<Tuple<long, long>> getInputValues(int offset, int length)
@@ -92,11 +102,12 @@ class Intcode
                 updateMemoryLocation(instructionInputs[2], firstInput * secondInput);
                 break;
             case 3:
-                Console.WriteLine("Enter an input value");
-                updateMemoryLocation(instructionInputs[0], Convert.ToInt64(Console.ReadLine()));
+                //Console.WriteLine("Enter an input value");
+                updateMemoryLocation(instructionInputs[0], Convert.ToInt64(nextInput)); //Console.ReadLine()
                 break;
             case 4:
-                Console.WriteLine(firstInput);
+                outputValue = firstInput;
+                //Console.WriteLine(firstInput);
                 break;
             case 5: //jump-if-true
                 if (firstInput != 0)
