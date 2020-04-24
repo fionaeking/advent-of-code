@@ -17,6 +17,7 @@ class Intcode
         puzzleInput = inputList;
         relativeBase = 0;
         hasFinished = false;
+        nextInput = 1;
     }
 
     public long Run()

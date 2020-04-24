@@ -21,6 +21,7 @@ namespace Day11
                 i.nextInput = r.newPointandDirection(Convert.ToInt32(firstOutput), Convert.ToInt32(secondOutput));
             }
             Console.WriteLine("Number of panels painted: " + r.getNumberPanelsPainted());
+            r.printOutPanels();
             
         }
 
