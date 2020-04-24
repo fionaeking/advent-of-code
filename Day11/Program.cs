@@ -13,6 +13,7 @@ namespace Day11
             var puzzleInput = puzzleInputToList (Constants.INPUT_FILENAME);
             Intcode i = new Intcode (puzzleInput);
             Robot r = new Robot();
+            i.nextInput = 1;
             while (!i.hasFinished)
             {
                 var firstOutput = i.Run ();

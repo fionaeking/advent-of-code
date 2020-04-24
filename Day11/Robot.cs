@@ -78,52 +78,38 @@ class Robot
 
     public void printOutPanels()
     {
-        var listAnglesOrdered = panelsPainted.OrderByDescending(key => key.Key.Item2).ThenBy(key => key.Key.Item1);; //.ToDictionary(key => key.Key);
-        int maxY = 0;
-        int minY = 1000;
-        int maxX = 0;
-        int minX = 1000;
+        var listAnglesOrdered = panelsPainted.OrderByDescending(key => key.Key.Item2).ThenBy(key => key.Key.Item1);
+        int maxY = Int32.MinValue;
+        int minX = Int32.MaxValue;
         foreach (var kvp in listAnglesOrdered)
         {
+            // This seems inefficient - could remove maxY but not minX
             maxY = Math.Max(kvp.Key.Item2, maxY);
-            maxX = Math.Max(kvp.Key.Item1, maxX);
-            minY = Math.Min(kvp.Key.Item2, minY);
             minX = Math.Min(kvp.Key.Item1, minX);
         }
-
-        foreach (var kvp in listAnglesOrdered)
-        {
-            Console.WriteLine(kvp.Key);
-        }
-
-        int prevY = maxY;
+        int currY = maxY;
         int xCount = minX;
         List<List<int>> finalImage = new List<List<int>>();
-        List<int> imageLine = new List<int>();
+        List<int> lineOfImage = new List<int>();
         foreach (var kvp in listAnglesOrdered)
         {
-            if(kvp.Key.Item2!=prevY)
+            if(kvp.Key.Item2!=currY)
             {
-                //check length of imageLine
-                while (imageLine.Count < (maxX-minX))
-                {
-                    Console.WriteLine("Pad");
-                    imageLine.Add(0);
-                }
-                finalImage.Add(imageLine);
-                imageLine = new List<int>();
+                finalImage.Add(lineOfImage);
+                //Reset variables
+                lineOfImage = new List<int>();
                 xCount = minX;
-                prevY = kvp.Key.Item2;
+                currY = kvp.Key.Item2;
             }
             while (kvp.Key.Item1 > xCount)
             {
-                imageLine.Add(0);
+                lineOfImage.Add(0);
                 xCount++;
             }
-            imageLine.Add(kvp.Value);
+            lineOfImage.Add(kvp.Value);
             xCount++;
         }
-        finalImage.Add(imageLine);
+        finalImage.Add(lineOfImage); // Add final line (N.B. I forgot this initially!)
 
         foreach (var line in finalImage)
         {
