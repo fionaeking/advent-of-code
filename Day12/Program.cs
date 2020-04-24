@@ -18,13 +18,7 @@ namespace Day12
             for (int timestep=0; timestep < Constants.TIMESTEP; timestep++)
             {
                 //Compare pairs - 6 combinations
-                updateVelocities(io, europa);
-                updateVelocities(io, ganymede);
-                updateVelocities(io, callisto);
-                updateVelocities(europa, ganymede);
-                updateVelocities(europa, callisto);
-                updateVelocities(ganymede, callisto);
-
+                callUpdateVelocities(listOfMoons);
                 foreach (var moon in listOfMoons)
                 {
                     moon.updatePosition();
@@ -35,39 +29,34 @@ namespace Day12
             
         }
 
+        static void callUpdateVelocities(List<Moon> moonList)
+        {
+            updateVelocities(moonList[0], moonList[1]);
+            updateVelocities(moonList[0], moonList[2]);
+            updateVelocities(moonList[0], moonList[3]);
+            updateVelocities(moonList[1], moonList[2]);
+            updateVelocities(moonList[1], moonList[3]);
+            updateVelocities(moonList[2], moonList[3]);
+        }
+
         static void updateVelocities(Moon moonOne, Moon moonTwo)
         {
-            if (moonOne.Px < moonTwo.Px)
+            var posnCount = 0;
+            foreach (var posn in new List<Tuple<int, int>>(){new Tuple<int, int>(moonOne.Px, moonTwo.Px),
+                                                             new Tuple<int, int>(moonOne.Py, moonTwo.Py),
+                                                             new Tuple<int, int>(moonOne.Pz, moonTwo.Pz)})
             {
-                moonOne.updateVx(true);
-                moonTwo.updateVx(false);
-            }
-            else if (moonOne.Px > moonTwo.Px)
-            {
-                moonOne.updateVx(false);
-                moonTwo.updateVx(true);
-            }
-
-            if (moonOne.Py < moonTwo.Py)
-            {
-                moonOne.updateVy(true);
-                moonTwo.updateVy(false);
-            }
-            else if (moonOne.Py > moonTwo.Py)
-            {
-                moonOne.updateVy(false);
-                moonTwo.updateVy(true);
-            }
-
-            if (moonOne.Pz < moonTwo.Pz)
-            {
-                moonOne.updateVz(true);
-                moonTwo.updateVz(false);
-            }
-            else if (moonOne.Pz > moonTwo.Pz)
-            {
-                moonOne.updateVz(false);
-                moonTwo.updateVz(true);
+                if (posn.Item1 < posn.Item2)
+                {
+                    moonOne.updateVelocity(posnCount, 1);
+                    moonTwo.updateVelocity(posnCount, -1);
+                }
+                else if (posn.Item1 > posn.Item2)
+                {
+                    moonOne.updateVelocity(posnCount, -1);
+                    moonTwo.updateVelocity(posnCount, 1);
+                }
+                posnCount++;
             }
         }
 

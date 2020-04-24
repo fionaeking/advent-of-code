@@ -38,6 +38,24 @@ class Moon
         Vx += (increase ? 1 : -1);
     }
 
+    public void updateVelocity(int posnCount, int amount)
+    {
+        switch(posnCount)
+        {
+            case 0:
+                Vx += amount;
+                break;
+            case 1:
+                Vy += amount;
+                break;
+            case 2:
+                Vz += amount;
+                break;
+            default:
+                break;
+        }
+    }
+
     public void updateVy(bool increase)
     {
         Vy += (increase ? 1 : -1);
