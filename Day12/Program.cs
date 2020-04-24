@@ -9,11 +9,10 @@ namespace Day12
         static void Main(string[] args)
         {
             List<List<int>> inputList = puzzleInputToList(Constants.INPUT_FILENAME);
-            Moon io = new Moon(inputList[0]);
-            Moon europa = new Moon(inputList[1]);
-            Moon ganymede = new Moon(inputList[2]);
-            Moon callisto = new Moon(inputList[3]);
-            List<Moon> listOfMoons = new List<Moon>(){io, europa, ganymede, callisto};
+            List<Moon> listOfMoons = new List<Moon>(){new Moon(inputList[0]), 
+                                                      new Moon(inputList[1]),
+                                                      new Moon(inputList[2]),
+                                                      new Moon(inputList[3])};
 
             for (int timestep=0; timestep < Constants.TIMESTEP; timestep++)
             {
@@ -31,13 +30,13 @@ namespace Day12
 
         static void callUpdateVelocities(List<Moon> moonList)
         {
-            // Todo - this could definitely be more concise
-            updateVelocities(moonList[0], moonList[1]);
-            updateVelocities(moonList[0], moonList[2]);
-            updateVelocities(moonList[0], moonList[3]);
-            updateVelocities(moonList[1], moonList[2]);
-            updateVelocities(moonList[1], moonList[3]);
-            updateVelocities(moonList[2], moonList[3]);
+            for (int i=0; i<moonList.Count; i++)
+            {
+                for (int j = i+1; j<moonList.Count; j++)
+                {
+                    updateVelocities(moonList[i], moonList[j]);
+                }
+            }
         }
 
         static void updateVelocities(Moon moonOne, Moon moonTwo)
@@ -68,9 +67,8 @@ namespace Day12
         }
 
         static List<List<int>> puzzleInputToList (string inputFilePath) {
-            var inputFile = File.ReadLines(inputFilePath);
             List<List<int>> allMoonPosns = new List<List<int>>();
-            foreach (var str in inputFile)
+            foreach (var str in File.ReadLines(inputFilePath))
             {
                 var substr = str.Remove(str.Length-1).Split(',');
                 List<int> oneMoonPosn = new List<int>();
