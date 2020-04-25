@@ -10,6 +10,8 @@ using System.IO;
 // Then find Least Common Multiple of those 3 periods
 // This will be timestep where the state matches the first state
 
+// Lessons learned - need to REALLY think how you can reduce complexity! (think outside the box)
+
 
 namespace Day12
 {
