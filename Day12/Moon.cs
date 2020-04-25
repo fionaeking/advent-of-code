@@ -89,4 +89,26 @@ class Moon
     {
         return calcPotentialEnergy() * calcKineticEnergy();
     }
+
+    public List<int> returnValuesAsList()
+    {
+        return new List<int>(){Px, Py, Pz, Vx, Vy, Vz};
+    }
+
+    public List<int> returnFirstAsList(int i)
+    {
+        if(i==0)
+        {
+            return new List<int>(){Px, Vx};
+        }
+        else if(i==1)
+        {
+            return new List<int>(){Py, Vy};
+        }
+        else
+        {
+            return new List<int>(){Pz, Vz};
+        }
+        
+    }
 }
