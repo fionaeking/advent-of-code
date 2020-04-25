@@ -91,6 +91,7 @@ class Intcode
     {
         long secondInput;
         long firstInput = getValueFromMode(instructionInputs[0]);
+        var validInput = false;
         switch (opcode)
         {
             case 1: // Addition
@@ -102,8 +103,20 @@ class Intcode
                 updateMemoryLocation(instructionInputs[2], firstInput * secondInput);
                 break;
             case 3:
-                //Console.WriteLine("Enter an input value");
-                updateMemoryLocation(instructionInputs[0], Convert.ToInt64(nextInput)); //Console.ReadLine()
+                while(!validInput)
+                {
+                    Console.WriteLine("Enter an input value");
+                    var valueRead = Console.ReadLine();
+                    if (valueRead=="-1" | valueRead=="0" | valueRead == "1")
+                    {
+                        updateMemoryLocation(instructionInputs[0], Convert.ToInt64(valueRead)); //nextInput));
+                        validInput = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid input");
+                    }
+                }
                 break;
             case 4:
                 outputValue = firstInput;
