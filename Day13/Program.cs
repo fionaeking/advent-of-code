@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Text;
+using System.Diagnostics;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,6 +16,7 @@ namespace Day13
             int[] tileCounter = new int[5];
             Dictionary<Tuple<int, int>, int> toDraw = new Dictionary<Tuple<int, int>, int>();
             long score = 0;
+            int iter = 0;
             while (!i.hasFinished)
             {
                 // Declaring separate variables to improve readability
@@ -38,8 +40,15 @@ namespace Day13
                         i.ballPosn = xPosn;
                     }
                 }
-                drawGame(toDraw, xPosn);
+                if (iter ==2)
+                {
+                    drawGame(toDraw, xPosn);
                 Console.WriteLine("\nScore: " + score);
+                iter = 0;
+                }
+                else
+                    iter++;
+                
             }
             //drawGame(toDraw);
             //Console.WriteLine(tileCounter[2]);
@@ -48,6 +57,10 @@ namespace Day13
         static void drawGame(Dictionary<Tuple<int, int>, int> pointsToDraw, long xVal)
         {
             Console.Clear();
+            Console.SetWindowSize(43, 21);
+
+            StringBuilder s = new StringBuilder();
+
             //Console.SetCursorPosition(0, 0); //1);
             Console.CursorVisible = false;
             var sortedList = pointsToDraw.OrderBy(key => key.Key.Item2).ThenBy(key => key.Key.Item1);
@@ -81,8 +94,11 @@ namespace Day13
             finalImage.Add(lineOfImage);
             foreach (var line in finalImage)
             {
-                Console.WriteLine(String.Join("", line));
+                s.Append(String.Join("", line));
+                s.Append("\n");
+                //Console.WriteLine(String.Join("", line));
             }
+            Console.WriteLine(s);
         }
 
         static string getTile(int tile)
