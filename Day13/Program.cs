@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Xml.Linq;
+using System.Text;
 using System.Diagnostics;
 using System;
 using System.Collections.Generic;
@@ -30,31 +31,39 @@ namespace Day13
                 else
                 {
                     toDraw[new Tuple<int, int>(Convert.ToInt32(xPosn), Convert.ToInt32(yPosn))] = Convert.ToInt32(tile);
-                    tileCounter[tile] += 1;
-                    if (tile==3)
+                    if (0<=tile & tile<=4)
                     {
-                        i.paddlePosn = xPosn;
+                        tileCounter[tile] += 1;
+                        if (tile==3)
+                        {
+                            i.paddlePosn = xPosn;
+                        }
+                        else if (tile==4)
+                        {
+                            i.ballPosn = xPosn;
+                        }
                     }
-                    else if (tile==4)
+                    else
                     {
-                        i.ballPosn = xPosn;
+                        // End of program
+                        break;
                     }
                 }
-                if (iter ==2)
-                {
-                    drawGame(toDraw, xPosn);
-                Console.WriteLine("\nScore: " + score);
-                iter = 0;
-                }
-                else
-                    iter++;
+                //if (iter ==2)
+                //{
+                drawGame(toDraw, Convert.ToInt32(score));
+                //Console.WriteLine("\nScore: " + score);
+                //iter = 0;
+                //}
+                //else
+                //    iter++;
                 
             }
             //drawGame(toDraw);
             //Console.WriteLine(tileCounter[2]);
         }
 
-        static void drawGame(Dictionary<Tuple<int, int>, int> pointsToDraw, long xVal)
+        static void drawGame(Dictionary<Tuple<int, int>, int> pointsToDraw, int score)
         {
             Console.Clear();
             Console.SetWindowSize(43, 21);
@@ -98,6 +107,8 @@ namespace Day13
                 s.Append("\n");
                 //Console.WriteLine(String.Join("", line));
             }
+            //Console.WriteLine("\nScore: " + score);
+            s.Append("\nScore: " + score);
             Console.WriteLine(s);
         }
 
