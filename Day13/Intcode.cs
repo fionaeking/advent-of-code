@@ -10,7 +10,8 @@ class Intcode
     public long outputValue;
     private long relativeBase;
     public bool hasFinished;
-    public int nextInput;
+    public long ballPosn;
+    public long paddlePosn;
     public Intcode(List<long> inputList)
     {
         instructionPointer = 0;
@@ -103,20 +104,34 @@ class Intcode
                 updateMemoryLocation(instructionInputs[2], firstInput * secondInput);
                 break;
             case 3:
+                long valueToWrite = 0;
                 while(!validInput)
                 {
-                    Console.WriteLine("Enter an input value");
-                    var valueRead = Console.ReadLine();
-                    if (valueRead=="-1" | valueRead=="0" | valueRead == "1")
+                    //Console.WriteLine("Enter an input value");
+                    //var valueRead = Console.ReadKey();
+                    //if (valueRead.Key==ConsoleKey.LeftArrow)
+                    if (paddlePosn>ballPosn)
                     {
-                        updateMemoryLocation(instructionInputs[0], Convert.ToInt64(valueRead)); //nextInput));
+                        valueToWrite = -1;
                         validInput = true;
                     }
-                    else
+                    //else if (valueRead.Key==ConsoleKey.RightArrow)
+                    else if(paddlePosn<ballPosn)
+                    {
+                        valueToWrite = 1;
+                        validInput = true;
+                    }
+                    else //if (valueRead.Key==ConsoleKey.DownArrow)
+                    {
+                        valueToWrite = 0;
+                        validInput = true;
+                    }
+                    /*else
                     {
                         Console.WriteLine("Invalid input");
-                    }
+                    }*/
                 }
+                updateMemoryLocation(instructionInputs[0], valueToWrite); //nextInput));
                 break;
             case 4:
                 outputValue = firstInput;
