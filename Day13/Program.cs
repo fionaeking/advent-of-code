@@ -38,16 +38,18 @@ namespace Day13
                         i.ballPosn = xPosn;
                     }
                 }
-                drawGame(toDraw);
+                drawGame(toDraw, xPosn);
                 Console.WriteLine("\nScore: " + score);
             }
-            drawGame(toDraw);
+            //drawGame(toDraw);
             //Console.WriteLine(tileCounter[2]);
         }
 
-        static void drawGame(Dictionary<Tuple<int, int>, int> pointsToDraw)
+        static void drawGame(Dictionary<Tuple<int, int>, int> pointsToDraw, long xVal)
         {
             Console.Clear();
+            //Console.SetCursorPosition(0, 0); //1);
+            Console.CursorVisible = false;
             var sortedList = pointsToDraw.OrderBy(key => key.Key.Item2).ThenBy(key => key.Key.Item1);
             int maxY = Int32.MinValue;
             int minX = Int32.MaxValue;
