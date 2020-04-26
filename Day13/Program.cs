@@ -14,10 +14,10 @@ namespace Day13
         {
          var puzzleInput = puzzleInputToList (Constants.INPUT_FILENAME);
             Intcode i = new Intcode(puzzleInput);
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
             int[] tileCounter = new int[5];
             Dictionary<Tuple<int, int>, int> toDraw = new Dictionary<Tuple<int, int>, int>();
             long score = 0;
-            int iter = 0;
             while (!i.hasFinished)
             {
                 // Declaring separate variables to improve readability
@@ -49,28 +49,17 @@ namespace Day13
                         break;
                     }
                 }
-                //if (iter ==2)
-                //{
                 drawGame(toDraw, Convert.ToInt32(score));
-                //Console.WriteLine("\nScore: " + score);
-                //iter = 0;
-                //}
-                //else
-                //    iter++;
-                
             }
-            //drawGame(toDraw);
-            //Console.WriteLine(tileCounter[2]);
         }
 
         static void drawGame(Dictionary<Tuple<int, int>, int> pointsToDraw, int score)
         {
+            // Use StringBuilder to reduce console flicker
+            StringBuilder s = new StringBuilder();
             Console.Clear();
             Console.SetWindowSize(43, 21);
-
-            StringBuilder s = new StringBuilder();
-
-            //Console.SetCursorPosition(0, 0); //1);
+            //Console.OutputEncoding = System.Text.Encoding.GetEncoding(1252);
             Console.CursorVisible = false;
             var sortedList = pointsToDraw.OrderBy(key => key.Key.Item2).ThenBy(key => key.Key.Item1);
             int maxY = Int32.MinValue;
@@ -105,9 +94,7 @@ namespace Day13
             {
                 s.Append(String.Join("", line));
                 s.Append("\n");
-                //Console.WriteLine(String.Join("", line));
             }
-            //Console.WriteLine("\nScore: " + score);
             s.Append("\nScore: " + score);
             Console.WriteLine(s);
         }
@@ -121,10 +108,10 @@ namespace Day13
                 return " ";
                 case 1:
                 //wall
-                return "W";
+                return $"{"\u25A8"}"; // "\\";
                 case 2:
                 //block
-                return "+";
+                return $"{"\u25A1"}"; // $"{(char)0x2592}"; //"+";
                 case 3:
                 //horizontal paddle
                 return "_";
