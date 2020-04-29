@@ -35,7 +35,6 @@ class Intcode
             performInstruction(opcode, instructionValues);
             if (opcode == 4)
             {
-                //Console.WriteLine(outputValue);
                 return outputValue;
             }
             opcode = getOpcode();
@@ -95,7 +94,6 @@ class Intcode
     {
         long secondInput;
         long firstInput = getValueFromMode(instructionInputs[0]);
-        var validInput = false;
         switch (opcode)
         {
             case 1: // Addition
@@ -110,22 +108,17 @@ class Intcode
                 var valueRead = 0;
                 if (newList.Count!=0)
                 {
-                    //valueRead = newList[newList.Count - 1];
                     valueRead = newList[0];
-                    //Console.WriteLine("Value read: " + valueRead);
-                    newList.RemoveAt(0); //newList.Count-1);
+                    newList.RemoveAt(0);
                 }
                 else
                 {
                     hasFinished = true;
-                    //Console.WriteLine("Enter an input value");
-                    //valueRead = Convert.ToInt32(Console.ReadLine());
                 }
-                updateMemoryLocation(instructionInputs[0], Convert.ToInt64(valueRead)); //nextInput));
+                updateMemoryLocation(instructionInputs[0], Convert.ToInt64(valueRead));
                 break;
             case 4:
                 outputValue = firstInput;
-                //Console.WriteLine("First input: " + firstInput);
                 break;
             case 5: //jump-if-true
                 if (firstInput != 0)
