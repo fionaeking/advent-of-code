@@ -13,20 +13,18 @@ namespace Day15
         static void Main(string[] args)
         {
             var puzzleInput = puzzleInputToList (Constants.INPUT_FILENAME);
-            for (int j=15; j<16; j++)
+            var startingList = new List<List<int>>(){new List<int>(){1}, 
+                                                              new List<int>(){2}, 
+                                                              new List<int>(){3}, 
+                                                              new List<int>(){4}};
+
+            int MAX = 1000;
+            for (int j=2; j<MAX; j++)
             {
-                //IEnumerable<IEnumerable<int>> result =
-                //getCombinations(Enumerable.Range(1, 4), j);
+                buildUpFunction(startingList);
+                List<List<int>> copyOfInput = new List<List<int>>(startingList);
 
-                var result = getCombinations(Enumerable.Range(1, 4).ToList(), j).ToList();
-                //foreach (var r in result) Console.WriteLine(String.Join("", r));
-                //Console.WriteLine("DONEDONEODONEONONODNONDONDODD");
-                result.RemoveAll(containsRedundantInstruction);
-                //foreach (var r in result) Console.WriteLine(String.Join("", r));
-
-                Console.WriteLine("Starting for loop");
-
-                foreach (var phaseSequence in result)
+                foreach (var phaseSequence in copyOfInput)
                 {       
                     int count = 0;
                     Intcode i = new Intcode(puzzleInput, phaseSequence);
@@ -37,10 +35,12 @@ namespace Day15
                         if (xPosn==2)
                         {
                             Console.WriteLine("min value is " + count);
-                            break;
+                            return;
                         }
                         else if (xPosn==0)
                         {
+                            if (!i.hasFinished)
+                                startingList.Remove(phaseSequence);
                             break;
                         }
                     }
@@ -50,52 +50,49 @@ namespace Day15
             
         }
 
-        // Search predicate returns true if string contains redundant instruction
-        private static bool containsRedundantInstruction(List<int> testList) //(String joinedString)
+        static void buildUpFunction(List<List<int>> startingList)
         {
-            var permutations = getPermutations(Enumerable.Range(1, 4).ToList(), 4);
-            var joinedString = String.Join("", testList);
-            return joinedString.Contains("12") 
-                    | joinedString.Contains("21")
-                    | joinedString.Contains("34") 
-                    | joinedString.Contains("43")
-                    | joinedString.Contains("132")
-                    | joinedString.Contains("142")
-                    | joinedString.Contains("231")
-                    | joinedString.Contains("241")
-                    | joinedString.Contains("314")
-                    | joinedString.Contains("324")
-                    | joinedString.Contains("413")
-                    | joinedString.Contains("423")
-                    | joinedString.Contains(permutations.ToString());
+            List<List<int>> copyOfInput = new List<List<int>>(startingList);
+            //Initially would be 1, 2, 3, 4
+            foreach (var elem in copyOfInput)
+            {
+                switch(elem.Last())
+                {
+                    case 1:
+                    startingList.Add(new List<int>(elem).Concat(new List<int>(){1}).ToList());
+                    startingList.Add(new List<int>(elem).Concat(new List<int>(){3}).ToList());
+                    startingList.Add(new List<int>(elem).Concat(new List<int>(){4}).ToList());
+                    startingList.Remove(elem);
+                    break;
+                    case 2:
+                    startingList.Add(new List<int>(elem).Concat(new List<int>(){2}).ToList());
+                    startingList.Add(new List<int>(elem).Concat(new List<int>(){3}).ToList());
+                    startingList.Add(new List<int>(elem).Concat(new List<int>(){4}).ToList());
+                    startingList.Remove(elem);
+                    break;
+                    case 3:
+                    startingList.Add(new List<int>(elem).Concat(new List<int>(){1}).ToList());
+                    startingList.Add(new List<int>(elem).Concat(new List<int>(){2}).ToList());
+                    startingList.Add(new List<int>(elem).Concat(new List<int>(){3}).ToList());
+                    startingList.Remove(elem);
+                    break;
+                    case 4:
+                    startingList.Add(new List<int>(elem).Concat(new List<int>(){1}).ToList());
+                    startingList.Add(new List<int>(elem).Concat(new List<int>(){2}).ToList());
+                    startingList.Add(new List<int>(elem).Concat(new List<int>(){4}).ToList());
+                    startingList.Remove(elem);
+                    break;
+                    default:
+                    break;
+                }
+            }
+
         }
 
         static List<Int64> puzzleInputToList (string inputFilePath) {
             var str = File.ReadLines (inputFilePath).First ();
             var listOfInts = str.Split (',').Select (Int64.Parse).ToList ();
             return listOfInts;
-        }
-
-        static IEnumerable<List<int>> getCombinations(List<int> list, int length)
-        {
-            // improve by removing if 1 followed by 2 or vice versa, or 3 followed by 4 or vice versa
-
-            // repeating - e.g. otherwise identical sequences with 12 and 21 
-            if (length == 1) return list.Select(t => new List<int> { t });
-            return getCombinations(list, length - 1)
-                .SelectMany(x => list, //.Where(o => (o.CompareTo(x.Last()) != 1 | o == 3 | o == 1)),
-                    (t1, t2) => t1.Concat(new List<int> { t2 })).Select(x => x.ToList());
-        }
-
-        static IEnumerable<List<int>> getPermutations(List<int> list, int length)
-        {
-            // improve by removing if 1 followed by 2 or vice versa, or 3 followed by 4 or vice versa
-
-            // repeating - e.g. otherwise identical sequences with 12 and 21 
-            if (length == 1) return list.Select(t => new List<int> { t });
-            return getCombinations(list, length - 1)
-                .SelectMany(x => list.Where(o => !x.Contains(o)),
-                    (t1, t2) => t1.Concat(new List<int> { t2 })).Select(x => x.ToList());
         }
     }
 }

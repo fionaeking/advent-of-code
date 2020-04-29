@@ -16,10 +16,10 @@ class Intcode
     public Intcode(List<long> inputList, List<int> inputSeq)
     {
         instructionPointer = 0;
-        puzzleInput = inputList;
+        puzzleInput = new List<long>(inputList);
         relativeBase = 0;
         hasFinished = false;
-        newList = inputSeq;
+        newList = new List<int>(inputSeq);
     }
 
     public long Run()
@@ -110,8 +110,10 @@ class Intcode
                 var valueRead = 0;
                 if (newList.Count!=0)
                 {
-                    valueRead = newList[newList.Count - 1];
-                    newList.RemoveAt(newList.Count-1);
+                    //valueRead = newList[newList.Count - 1];
+                    valueRead = newList[0];
+                    //Console.WriteLine("Value read: " + valueRead);
+                    newList.RemoveAt(0); //newList.Count-1);
                 }
                 else
                 {
@@ -123,7 +125,7 @@ class Intcode
                 break;
             case 4:
                 outputValue = firstInput;
-                //Console.WriteLine(firstInput);
+                //Console.WriteLine("First input: " + firstInput);
                 break;
             case 5: //jump-if-true
                 if (firstInput != 0)
