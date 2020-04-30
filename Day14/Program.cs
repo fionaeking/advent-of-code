@@ -1,9 +1,6 @@
-﻿using System.Net;
-using System.Collections;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 //Dict
 //Key = FUEL
@@ -26,70 +23,13 @@ namespace Day14
         static void Main(string[] args)
         {
             var inputAsDict = puzzleInputToDict(Constants.INPUT_FILENAME);
-            var reqdItems = new List<string>();
-            var reqdAmounts = new List<string>();
-            var oreCount = 0;
-            var startingVal = inputAsDict["FUEL"];
-            var excess =  new Dictionary<string, int>();
-
-            while(startingVal.Count>1)
-            {
-                startingVal = new List<Tuple<string, int>>(inputAsDict["FUEL"]);
-                foreach (var item in startingVal) Console.WriteLine(String.Join("", item));
-                for (int i=1; i<startingVal.Count; i++)
-                {
-                    if (startingVal[i].Item1=="ORE")
-                    {
-                        oreCount += startingVal[i].Item2;
-                        Console.WriteLine("Ore count: " + oreCount);
-                        inputAsDict["FUEL"].Remove(startingVal[i]);
-                    }
-                    else
-                    {
-                        var inputFuel = inputAsDict[startingVal[i].Item1];
-                        var inputFuelAmount = inputFuel[0].Item2;
-                        var outputFuelAmount = startingVal[i].Item2;
-                        var multiplier = 1;
-
-                        // Check for excess
-                        if (excess.ContainsKey(startingVal[i].Item1))
-                        {
-                            if (outputFuelAmount>excess[startingVal[i].Item1])
-                            {
-                                outputFuelAmount -= excess[startingVal[i].Item1];
-                                excess.Remove(startingVal[i].Item1);
-                            }
-                            else
-                            {
-                                excess[startingVal[i].Item1] -= outputFuelAmount;
-                                outputFuelAmount = 0;
-                                inputAsDict["FUEL"].Remove(startingVal[i]);
-                                continue;
-                            }
-                        } 
-                        while(inputFuelAmount<outputFuelAmount)
-                        {
-                            multiplier += 1;
-                            inputFuelAmount += inputFuel[0].Item2;
-                        }
-                        if (inputFuelAmount-outputFuelAmount>0)
-                        {
-                            Console.WriteLine("amount: " + inputFuelAmount + " " + outputFuelAmount);
-                            excess[startingVal[i].Item1] = inputFuelAmount - outputFuelAmount;
-                        }
-                        for (int j=1; j<inputFuel.Count; j++)
-                        {
-                            var newAmount = inputFuel[j].Item2 * multiplier;
-                            inputAsDict["FUEL"].Add(new Tuple<string, int>(inputFuel[j].Item1, newAmount));
-                        }
-                        inputAsDict["FUEL"].Remove(startingVal[i]);
-                    }
-                }
-            }
-            Console.WriteLine(oreCount);
+            Nanofactory n = new Nanofactory(inputAsDict);
+            var oreCount = n.getOreCount();
+            Console.WriteLine("ORE count: " + oreCount);
         }
 
-         static Dictionary<string, List<Tuple<string, int>>> puzzleInputToDict (string inputFilePath) {
+         static Dictionary<string, List<Tuple<string, int>>> puzzleInputToDict (string inputFilePath) 
+         {
             Dictionary<string, List<Tuple<string, int>>> dictOfStrings = new Dictionary<string, List<Tuple<string, int>>>();
             
             var listOfStrings = File.ReadLines (inputFilePath);
@@ -111,5 +51,7 @@ namespace Day14
             }
             return dictOfStrings;
         }
+
+        
     }
 }
