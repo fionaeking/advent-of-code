@@ -15,10 +15,8 @@ class Nanofactory
     public int getOreCount()
     {
         var oreCount = 0;
-        var fuelComponents = inputAsDict[Constants.FUEL];
-        while(fuelComponents.Count>1)
+        while(inputAsDict[Constants.FUEL].Count>1)
         {
-            fuelComponents = new List<Tuple<string, int>>(inputAsDict[Constants.FUEL]);
             oreCount = updateFuelDictionary(oreCount);
         }
         return oreCount;

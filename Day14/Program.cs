@@ -24,12 +24,13 @@ namespace Day14
         {
             var inputAsDict = puzzleInputToDict(Constants.INPUT_FILENAME);
             Nanofactory n = new Nanofactory(inputAsDict);
+
             var oreCount = n.getOreCount();
             Console.WriteLine("ORE count: " + oreCount);
         }
 
-         static Dictionary<string, List<Tuple<string, int>>> puzzleInputToDict (string inputFilePath) 
-         {
+        static Dictionary<string, List<Tuple<string, int>>> puzzleInputToDict (string inputFilePath) 
+        {
             Dictionary<string, List<Tuple<string, int>>> dictOfStrings = new Dictionary<string, List<Tuple<string, int>>>();
             
             var listOfStrings = File.ReadLines (inputFilePath);
@@ -52,6 +53,5 @@ namespace Day14
             return dictOfStrings;
         }
 
-        
     }
 }
