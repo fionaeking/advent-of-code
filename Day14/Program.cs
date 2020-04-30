@@ -1,10 +1,9 @@
-﻿using System.Collections;
+﻿using System.Net;
+using System.Collections;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
-
 
 //Dict
 //Key = FUEL
@@ -31,12 +30,10 @@ namespace Day14
             var reqdAmounts = new List<string>();
             var oreCount = 0;
             var startingVal = inputAsDict["FUEL"];
-
-            //foreach (var item in startingVal) Console.WriteLine(String.Join("", item));
+            var excess =  new Dictionary<string, int>();
 
             while(startingVal.Count>1)
             {
-                //Console.WriteLine(startingVal.Count);
                 startingVal = new List<Tuple<string, int>>(inputAsDict["FUEL"]);
                 foreach (var item in startingVal) Console.WriteLine(String.Join("", item));
                 for (int i=1; i<startingVal.Count; i++)
@@ -46,7 +43,6 @@ namespace Day14
                         oreCount += startingVal[i].Item2;
                         Console.WriteLine("Ore count: " + oreCount);
                         inputAsDict["FUEL"].Remove(startingVal[i]);
-                        //break;
                     }
                     else
                     {
@@ -54,10 +50,32 @@ namespace Day14
                         var inputFuelAmount = inputFuel[0].Item2;
                         var outputFuelAmount = startingVal[i].Item2;
                         var multiplier = 1;
+
+                        // Check for excess
+                        if (excess.ContainsKey(startingVal[i].Item1))
+                        {
+                            if (outputFuelAmount>excess[startingVal[i].Item1])
+                            {
+                                outputFuelAmount -= excess[startingVal[i].Item1];
+                                excess.Remove(startingVal[i].Item1);
+                            }
+                            else
+                            {
+                                excess[startingVal[i].Item1] -= outputFuelAmount;
+                                outputFuelAmount = 0;
+                                inputAsDict["FUEL"].Remove(startingVal[i]);
+                                continue;
+                            }
+                        } 
                         while(inputFuelAmount<outputFuelAmount)
                         {
                             multiplier += 1;
-                            inputFuelAmount += inputFuelAmount;
+                            inputFuelAmount += inputFuel[0].Item2;
+                        }
+                        if (inputFuelAmount-outputFuelAmount>0)
+                        {
+                            Console.WriteLine("amount: " + inputFuelAmount + " " + outputFuelAmount);
+                            excess[startingVal[i].Item1] = inputFuelAmount - outputFuelAmount;
                         }
                         for (int j=1; j<inputFuel.Count; j++)
                         {
@@ -66,12 +84,9 @@ namespace Day14
                         }
                         inputAsDict["FUEL"].Remove(startingVal[i]);
                     }
-                    //}
                 }
             }
             Console.WriteLine(oreCount);
-
-            
         }
 
          static Dictionary<string, List<Tuple<string, int>>> puzzleInputToDict (string inputFilePath) {
