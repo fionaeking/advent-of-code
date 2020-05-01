@@ -1,0 +1,11 @@
+C:\Users\Fiona\Documents\GitHub\advent-of-code\Day16\bin\Debug\netcoreapp2.2\Day16.deps.json
+C:\Users\Fiona\Documents\GitHub\advent-of-code\Day16\bin\Debug\netcoreapp2.2\Day16.runtimeconfig.json
+C:\Users\Fiona\Documents\GitHub\advent-of-code\Day16\bin\Debug\netcoreapp2.2\Day16.runtimeconfig.dev.json
+C:\Users\Fiona\Documents\GitHub\advent-of-code\Day16\bin\Debug\netcoreapp2.2\Day16.dll
+C:\Users\Fiona\Documents\GitHub\advent-of-code\Day16\bin\Debug\netcoreapp2.2\Day16.pdb
+C:\Users\Fiona\Documents\GitHub\advent-of-code\Day16\obj\Debug\netcoreapp2.2\Day16.csprojAssemblyReference.cache
+C:\Users\Fiona\Documents\GitHub\advent-of-code\Day16\obj\Debug\netcoreapp2.2\Day16.csproj.CoreCompileInputs.cache
+C:\Users\Fiona\Documents\GitHub\advent-of-code\Day16\obj\Debug\netcoreapp2.2\Day16.AssemblyInfoInputs.cache
+C:\Users\Fiona\Documents\GitHub\advent-of-code\Day16\obj\Debug\netcoreapp2.2\Day16.AssemblyInfo.cs
+C:\Users\Fiona\Documents\GitHub\advent-of-code\Day16\obj\Debug\netcoreapp2.2\Day16.dll
+C:\Users\Fiona\Documents\GitHub\advent-of-code\Day16\obj\Debug\netcoreapp2.2\Day16.pdb

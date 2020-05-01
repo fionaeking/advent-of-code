@@ -29,6 +29,11 @@ namespace Day14
             Console.WriteLine("ORE count: " + oreCount);
         }
 
+        static void testFunct(Dictionary<string, List<Tuple<string, int>>> inputAsDict)
+        {
+            var fuelComponents = new List<Tuple<string, int>>(inputAsDict[Constants.ORE]);
+        }
+
         static Dictionary<string, List<Tuple<string, int>>> puzzleInputToDict (string inputFilePath) 
         {
             Dictionary<string, List<Tuple<string, int>>> dictOfStrings = new Dictionary<string, List<Tuple<string, int>>>();
