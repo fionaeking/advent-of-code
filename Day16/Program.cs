@@ -8,10 +8,22 @@ namespace Day16
     {
         static void Main(string[] args)
         {
-            var prevOutputString = puzzleInputToList(Constants.INPUT_FILENAME);
+            var originalInput = puzzleInputToList(Constants.INPUT_FILENAME);
+            var messageOffset = 0;
+            foreach (var digit in originalInput.Take(7))
+            {
+                messageOffset *= 10;
+                messageOffset += digit;
+            }
+
+            var prevOutputString = Enumerable.Repeat(originalInput, 10000).SelectMany(arr => arr).ToArray();
+            //var prevOutputString = Enumerable.Repeat(originalInput,5);
+            //Console.WriteLine(String.Join("", prevOutputString));
             var finalPhase = 100;
             var finalOutput = getOutputAfterPhase(prevOutputString, finalPhase);
-            Console.WriteLine($"First 8 digits after phase {finalPhase}: {String.Join("", finalOutput.Take(8))}");
+            messageOffset = messageOffset % finalOutput.Length;
+            Console.WriteLine($"First 8 digits after phase {finalPhase}: {String.Join("", finalOutput.Skip(messageOffset).Take(8))}");
+            //Console.WriteLine($"First 8 digits after phase {finalPhase}: {String.Join("", finalOutput.Take(8))}");
         }
 
         static int[] puzzleInputToList (string inputFilePath) 
