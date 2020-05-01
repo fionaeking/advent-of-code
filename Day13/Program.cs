@@ -10,7 +10,7 @@ namespace Day13
     {
         static void Main(string[] args)
         {
-         var puzzleInput = puzzleInputToList (Constants.INPUT_FILENAME);
+            var puzzleInput = puzzleInputToList (Constants.INPUT_FILENAME);
             Intcode i = new Intcode(puzzleInput);
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             int[] tileCounter = new int[5];

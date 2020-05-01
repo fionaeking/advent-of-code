@@ -12,6 +12,7 @@ class Intcode
     public bool hasFinished;
     public long ballPosn;
     public long paddlePosn;
+    
     public Intcode(List<long> inputList)
     {
         instructionPointer = 0;

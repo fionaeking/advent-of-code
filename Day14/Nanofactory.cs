@@ -1,31 +1,63 @@
+using System.Linq;
 using System;
 using System.Collections.Generic;
 
 class Nanofactory
 {
-    Dictionary<string, List<Tuple<string, int>>> inputAsDict;
+    public Dictionary<string, List<Tuple<string, int>>> inputAsDict;
     Dictionary<string, int> excess;
 
-    public Nanofactory(Dictionary<string, List<Tuple<string, int>>> puzzleInput)
+    List<Tuple<string, int>> keepTrack;
+
+    public Nanofactory()
     {
-        inputAsDict = puzzleInput;
         excess =  new Dictionary<string, int>();
+        keepTrack = new List<Tuple<string, int>>();
     }
 
     public int getOreCount()
     {
         var oreCount = 0;
+        
         while(inputAsDict[Constants.FUEL].Count>1)
         {
             oreCount = updateFuelDictionary(oreCount);
         }
-        return oreCount;
-    }
 
-    int increaseOreCount(Tuple<string, int> inputTuple)
-    {
-        inputAsDict[Constants.FUEL].Remove(inputTuple);
-        return inputTuple.Item2;
+        /*Console.WriteLine("Excess");
+        foreach (var k in excess)
+            Console.WriteLine(k.Key + " " + k.Value);
+        var keepTrackGrouped = keepTrack.GroupBy(k => k.Item1).Select(t=>new {Key= t.Key , Value= t.Sum(u=>u.Item2)}).ToList();
+        Dictionary<string, int> chemicalToOreAmount = new Dictionary<string, int>();
+        Console.WriteLine("Keep track");
+        foreach(var item in keepTrackGrouped)
+        {
+            var inputFuel = inputAsDict[item.Key];
+            //Console.WriteLine(String.Join("", inputFuel[1]));
+            var multiplier = 1;
+            var originalValue = inputFuel[0].Item2;
+            while(item.Value>originalValue)
+            {
+                multiplier += 1;
+                originalValue += inputFuel[0].Item2;
+            }
+            chemicalToOreAmount[item.Key] = inputFuel[1].Item2 * multiplier;
+            //Console.WriteLine(inputFuel[1].Item2 * multiplier);
+        }
+        foreach (var kv in chemicalToOreAmount)
+        {
+            //Console.WriteLine(kv.Key + " " + kv.Value);
+            if (excess.ContainsKey(kv.Key))
+            {
+                Console.WriteLine(kv.Key + " " + kv.Value/excess[kv.Key]);
+            }
+        }*/
+
+        //Every 314 units of fuel produced, we produce enough excess NZVS for one more unit of fuel
+        // i.e. that iteration, we can minus the number of ore required to make kv.Value amount of fuel
+        
+
+        return oreCount;
     }
 
     int updateFuelDictionary(int oreCount)
@@ -36,7 +68,8 @@ class Nanofactory
             var chemical = fuelComponents[chemicalIndex];
             if (chemical.Item1==Constants.ORE)
             {
-                oreCount += increaseOreCount(chemical);
+                oreCount += chemical.Item2;
+                inputAsDict[Constants.FUEL].Remove(chemical);
             }
             else
             {
@@ -58,6 +91,10 @@ class Nanofactory
         for (int j=1; j<inputFuel.Count; j++)
         {
             var newAmount = inputFuel[j].Item2 * multiplier;
+            if (inputFuel[j].Item1==Constants.ORE)
+            {
+                keepTrack.Add(new Tuple<string, int>(inputFuel[0].Item1, inputFuel[0].Item2*multiplier));
+            }
             inputAsDict[Constants.FUEL].Add(new Tuple<string, int>(inputFuel[j].Item1, newAmount));
         }
         return inputFuelAmount - outputFuelAmount;
@@ -72,6 +109,10 @@ class Nanofactory
             {
                 excess[chemical.Item1] -= outputFuelAmount;
                 outputFuelAmount = 0;
+                if (outputFuelAmount==excess[chemical.Item1])
+                {
+                    excess.Remove(chemical.Item1);
+                }
                 inputAsDict[Constants.FUEL].Remove(chemical);
             }
             else

@@ -22,11 +22,23 @@ namespace Day14
     {
         static void Main(string[] args)
         {
-            var inputAsDict = puzzleInputToDict(Constants.INPUT_FILENAME);
-            Nanofactory n = new Nanofactory(inputAsDict);
+            //Nanofactory n = new Nanofactory(inputAsDict);
+            var oreResourcesAvailable = 1000000000000;
+            var iterationCount=0;
+            Nanofactory n = new Nanofactory();
+            while(oreResourcesAvailable>0)
+            {
+                n.inputAsDict = puzzleInputToDict(Constants.INPUT_FILENAME);
+                var oreCount = n.getOreCount();
+                //Console.WriteLine("ore count: " + oreCount);
+                oreResourcesAvailable -= oreCount;
+                iterationCount++;
+            }
 
-            var oreCount = n.getOreCount();
-            Console.WriteLine("ORE count: " + oreCount);
+            Console.WriteLine($"{iterationCount} units of fuel produced");
+
+            //var oreCount = n.getOreCount();
+            //Console.WriteLine("ORE count: " + oreCount);
         }
 
         static void testFunct(Dictionary<string, List<Tuple<string, int>>> inputAsDict)
