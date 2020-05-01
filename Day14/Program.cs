@@ -22,28 +22,69 @@ namespace Day14
     {
         static void Main(string[] args)
         {
-            //Nanofactory n = new Nanofactory(inputAsDict);
             var oreResourcesAvailable = 1000000000000;
-            var iterationCount=0;
+            //var iterationCount=0;
             Nanofactory n = new Nanofactory();
+            n.inputAsDict = puzzleInputToDict(Constants.INPUT_FILENAME);
+            var oreCount = n.getOreCount();
+            var storeExcess = new Dictionary<string, long>(n.excess);
+            var iterationCount = Convert.ToInt64(0.8 * oreResourcesAvailable/oreCount);
+            //var iterationCount = 5200000;
+            foreach (var kv in storeExcess)
+            {
+                n.excess[kv.Key] = n.excess[kv.Key] * iterationCount;
+            }
+            long subtract = Convert.ToInt64(iterationCount)*Convert.ToInt64(oreCount);
+            oreResourcesAvailable = oreResourcesAvailable - subtract;
+
+            /*bool isNegative = false;
+            //var storeExcessFinal = new Dictionary<string, long>(n.excess);
+            while(!isNegative)
+            {
+                var storeExcessFinal = new Dictionary<string, long>(n.excess);
+                //Console.WriteLine("In while loop");
+                foreach (var kv in storeExcessFinal)
+                {
+                    isNegative = kv.Value-storeExcess[kv.Key]<0;
+                }
+                foreach (var kv in storeExcessFinal)
+                {
+                    n.excess[kv.Key] -= storeExcess[kv.Key];
+                }
+                iterationCount++;
+            }
+            Console.WriteLine("out while loop");  */
+            
             while(oreResourcesAvailable>0)
             {
                 n.inputAsDict = puzzleInputToDict(Constants.INPUT_FILENAME);
-                var oreCount = n.getOreCount();
+                oreCount = n.getOreCount();
                 //Console.WriteLine("ore count: " + oreCount);
                 oreResourcesAvailable -= oreCount;
-                iterationCount++;
+                if (oreResourcesAvailable>0)
+                    iterationCount++;
             }
-
+            
+            /*while(true)
+            {
+                var storeExcessFinal = new Dictionary<string, long>(n.excess);
+                Console.WriteLine("In while loop");
+                foreach (var kv in storeExcessFinal)
+                {
+                    if(kv.Value-storeExcess[kv.Key]<0)
+                    {
+                        Console.WriteLine($"{iterationCount} units of fuel produced");
+                        return;
+                    }
+                    else
+                    {
+                        n.excess[kv.Key] -= storeExcess[kv.Key];
+                    }
+                }
+                iterationCount++;
+            }*/
+        
             Console.WriteLine($"{iterationCount} units of fuel produced");
-
-            //var oreCount = n.getOreCount();
-            //Console.WriteLine("ORE count: " + oreCount);
-        }
-
-        static void testFunct(Dictionary<string, List<Tuple<string, int>>> inputAsDict)
-        {
-            var fuelComponents = new List<Tuple<string, int>>(inputAsDict[Constants.ORE]);
         }
 
         static Dictionary<string, List<Tuple<string, int>>> puzzleInputToDict (string inputFilePath) 
