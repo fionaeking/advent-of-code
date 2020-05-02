@@ -16,85 +16,32 @@ For each item in list:
         Else substitute old fuel for new fuel in list
 */
 
-namespace Day14  // 1,118,502 too low // 1,330,069 too high
+namespace Day14
 {
     class Program
     {
         static void Main(string[] args)
         {
-            var oreResourcesAvailable = 1000000000000;
+            var oreResourcesAvailable = Constants.MAX_RESOURCES;
             Nanofactory n = new Nanofactory();
             n.inputAsDict = puzzleInputToDict(Constants.INPUT_FILENAME);
             var oreCount = 0;
-            //var oreCount = n.getOreCount();
             var iterationCount = 0;
-            //oreResourcesAvailable - oreCount;
-            //var storeExcess = new Dictionary<string, long>(n.excess);
-            /*var iterationCount = Convert.ToInt64(0.8 * oreResourcesAvailable/oreCount);
-            //var iterationCount = 5200000;
-            foreach (var kv in storeExcess)
-            {
-                n.excess[kv.Key] = n.excess[kv.Key] * iterationCount;
-            }
-            long subtract = Convert.ToInt64(iterationCount)*Convert.ToInt64(oreCount);
-            oreResourcesAvailable = oreResourcesAvailable - subtract;*/
-
-            /*bool isNegative = false;
-            //var storeExcessFinal = new Dictionary<string, long>(n.excess);
-            while(!isNegative)
-            {
-                var storeExcessFinal = new Dictionary<string, long>(n.excess);
-                //Console.WriteLine("In while loop");
-                foreach (var kv in storeExcessFinal)
-                {
-                    isNegative = kv.Value-storeExcess[kv.Key]<0;
-                }
-                foreach (var kv in storeExcessFinal)
-                {
-                    n.excess[kv.Key] -= storeExcess[kv.Key];
-                }
-                iterationCount++;
-            }
-            Console.WriteLine("out while loop");  */
-            
             while(oreResourcesAvailable>0)
             {
                 n.inputAsDict = puzzleInputToDict(Constants.INPUT_FILENAME);
                 oreCount = n.getOreCount();
-                //Console.WriteLine("ore count: " + oreCount);
                 oreResourcesAvailable = oreResourcesAvailable - oreCount;
-                if (oreResourcesAvailable>0)
+                if(oreResourcesAvailable>0) //without this statement, iterationCount value was 1 too many
                     iterationCount++;
             }
-            
-            /*while(true)
-            {
-                var storeExcessFinal = new Dictionary<string, long>(n.excess);
-                Console.WriteLine("In while loop");
-                foreach (var kv in storeExcessFinal)
-                {
-                    if(kv.Value-storeExcess[kv.Key]<0)
-                    {
-                        Console.WriteLine($"{iterationCount} units of fuel produced");
-                        return;
-                    }
-                    else
-                    {
-                        n.excess[kv.Key] -= storeExcess[kv.Key];
-                    }
-                }
-                iterationCount++;
-            }*/
-        
             Console.WriteLine($"{iterationCount} units of fuel produced");
         }
 
         static Dictionary<string, List<Tuple<string, int>>> puzzleInputToDict (string inputFilePath) 
         {
             Dictionary<string, List<Tuple<string, int>>> dictOfStrings = new Dictionary<string, List<Tuple<string, int>>>();
-            
-            var listOfStrings = File.ReadLines (inputFilePath);
-            foreach (var str in listOfStrings)
+            foreach (var str in File.ReadLines (inputFilePath))
             {
                 List<Tuple<string, int>> valList = new List<Tuple<string, int>>();
                 var stringComponents = str.Split ("=>");

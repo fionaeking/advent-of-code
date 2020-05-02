@@ -2,6 +2,8 @@
 using System.IO;
 using System.Linq;
 
+// Flawed Frequency Transmission
+
 namespace Day16
 {
     class Program
@@ -9,27 +11,28 @@ namespace Day16
         static void Main(string[] args)
         {
             var originalInput = puzzleInputToList(Constants.INPUT_FILENAME);
+            var prevOutputString = Enumerable.Repeat(originalInput, Constants.REPEAT).SelectMany(arr => arr).ToArray();
+            var finalOutput = getOutputAfterPhase(prevOutputString, Constants.FINAL_PHASE);
+            var messageOffset = getMessageOffset(originalInput, finalOutput.Length);
+            Console.WriteLine($"First 8 digits after phase {Constants.FINAL_PHASE}: {String.Join("", finalOutput.Skip(messageOffset).Take(8))}");
+        }
+
+        static int getMessageOffset(int[] inputArray, int outputArrayLength)
+        {
             var messageOffset = 0;
-            foreach (var digit in originalInput.Take(7))
+            foreach (var digit in inputArray.Take(7))
             {
                 messageOffset *= 10;
                 messageOffset += digit;
             }
+            return messageOffset % outputArrayLength;
 
-            var prevOutputString = Enumerable.Repeat(originalInput, 10000).SelectMany(arr => arr).ToArray();
-            //var prevOutputString = Enumerable.Repeat(originalInput,5);
-            //Console.WriteLine(String.Join("", prevOutputString));
-            var finalPhase = 100;
-            var finalOutput = getOutputAfterPhase(prevOutputString, finalPhase);
-            messageOffset = messageOffset % finalOutput.Length;
-            Console.WriteLine($"First 8 digits after phase {finalPhase}: {String.Join("", finalOutput.Skip(messageOffset).Take(8))}");
-            //Console.WriteLine($"First 8 digits after phase {finalPhase}: {String.Join("", finalOutput.Take(8))}");
         }
 
         static int[] puzzleInputToList (string inputFilePath) 
         {
-            var str = File.ReadLines (inputFilePath).First();
-            var listOfInts = str.ToCharArray().Select(c => Convert.ToInt32(c.ToString())).ToArray();
+            var inputAsString = File.ReadLines (inputFilePath).First();
+            var listOfInts = inputAsString.ToCharArray().Select(c => Convert.ToInt32(c.ToString())).ToArray();
             return listOfInts;
         }
 
