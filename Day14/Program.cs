@@ -16,26 +16,28 @@ For each item in list:
         Else substitute old fuel for new fuel in list
 */
 
-namespace Day14
+namespace Day14  // 1,118,502 too low // 1,330,069 too high
 {
     class Program
     {
         static void Main(string[] args)
         {
             var oreResourcesAvailable = 1000000000000;
-            //var iterationCount=0;
             Nanofactory n = new Nanofactory();
             n.inputAsDict = puzzleInputToDict(Constants.INPUT_FILENAME);
-            var oreCount = n.getOreCount();
-            var storeExcess = new Dictionary<string, long>(n.excess);
-            var iterationCount = Convert.ToInt64(0.8 * oreResourcesAvailable/oreCount);
+            var oreCount = 0;
+            //var oreCount = n.getOreCount();
+            var iterationCount = 0;
+            //oreResourcesAvailable - oreCount;
+            //var storeExcess = new Dictionary<string, long>(n.excess);
+            /*var iterationCount = Convert.ToInt64(0.8 * oreResourcesAvailable/oreCount);
             //var iterationCount = 5200000;
             foreach (var kv in storeExcess)
             {
                 n.excess[kv.Key] = n.excess[kv.Key] * iterationCount;
             }
             long subtract = Convert.ToInt64(iterationCount)*Convert.ToInt64(oreCount);
-            oreResourcesAvailable = oreResourcesAvailable - subtract;
+            oreResourcesAvailable = oreResourcesAvailable - subtract;*/
 
             /*bool isNegative = false;
             //var storeExcessFinal = new Dictionary<string, long>(n.excess);
@@ -60,7 +62,7 @@ namespace Day14
                 n.inputAsDict = puzzleInputToDict(Constants.INPUT_FILENAME);
                 oreCount = n.getOreCount();
                 //Console.WriteLine("ore count: " + oreCount);
-                oreResourcesAvailable -= oreCount;
+                oreResourcesAvailable = oreResourcesAvailable - oreCount;
                 if (oreResourcesAvailable>0)
                     iterationCount++;
             }
