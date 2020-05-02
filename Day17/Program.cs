@@ -21,7 +21,37 @@ namespace Day17
                 var convertedOutput = asciiToChar(output);
                 outputString = String.Concat(outputString, convertedOutput);
             }
-            Console.WriteLine(outputString);
+            var test = outputString.Split("\n");
+            var height = test.Length-2;
+            char[][] chArray  = new char[height-1][];
+
+            var sum = 0;
+            
+            for (int j=0; j<height-1; j++)
+            {
+                chArray[j] = test[j].ToCharArray();
+            }
+            for (int y=1; y<chArray.Length-1; y++)
+            {
+                for (int x=1; x<chArray[0].Length-1; x++)
+                {
+                    if (chArray[y][x]=='#')
+                    {
+                        if (chArray[y-1][x]=='#' & 
+                            chArray[y+1][x]=='#' &
+                            chArray[y][x+1]=='#' &
+                            chArray[y][x-1]=='#')
+                            sum += (x*y);
+                            //chArray[y][x] = 'O';
+                    }
+                }
+            }
+            foreach (var p in chArray)
+                Console.WriteLine(String.Join("", p));
+
+            Console.WriteLine(sum);
+
+            // Identify coordinates where scaffold char is surrounded by other scaffold chars
         }
 
         static List<Int64> puzzleInputToList (string inputFilePath) {
