@@ -1,7 +1,4 @@
-﻿using System.Net;
-using System.Xml.Linq;
-using System.Text;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,87 +9,79 @@ namespace Day15
     {
         static void Main(string[] args)
         {
-            var puzzleInput = puzzleInputToList (Constants.INPUT_FILENAME);
+            var puzzleInput = puzzleInputToList(Constants.INPUT_FILENAME);
             var startingList = new List<List<int>>(){new List<int>(){1}, 
                                                               new List<int>(){2}, 
                                                               new List<int>(){3}, 
                                                               new List<int>(){4}};
+            var count = fewestMovesToOxygen(puzzleInput, startingList);
+            Console.WriteLine("Min value is " + count);
+        }
 
-            int MAX = 1000;
-            for (int j=2; j<MAX; j++)
+        static void addElement(List<List<int>> startingList, List<int> elem, int numToAdd)
+        {
+            startingList.Add(new List<int>(elem).Concat(new List<int>(){numToAdd}).ToList());
+        }
+
+        static void buildUpFunction(List<List<int>> startingList)
+        {
+            List<List<int>> copyOfInput = new List<List<int>>(startingList);
+            foreach (var elem in copyOfInput)
+            {
+                switch(elem.Last())
+                {
+                    case 1:
+                    case 2:
+                    addElement(startingList, elem, elem.Last());
+                    addElement(startingList, elem, 3);
+                    addElement(startingList, elem, 4);
+                    startingList.Remove(elem);
+                    break;
+                    case 3:
+                    case 4:
+                    addElement(startingList, elem, 1);
+                    addElement(startingList, elem, 2);
+                    addElement(startingList, elem, elem.Last());
+                    startingList.Remove(elem);      
+                    break;
+                    default:
+                    break;
+                }
+            }
+        }
+
+        static List<Int64> puzzleInputToList (string inputFilePath) 
+        {
+            var str = File.ReadLines (inputFilePath).First ();
+            return str.Split (',').Select (Int64.Parse).ToList ();
+        }
+
+        static int fewestMovesToOxygen(List<long> puzzleInput, List<List<int>> startingList)
+        {
+            long xPosn = 0;
+            int count = 0;
+            while(xPosn!=2)
             {
                 buildUpFunction(startingList);
                 List<List<int>> copyOfInput = new List<List<int>>(startingList);
-
                 foreach (var phaseSequence in copyOfInput)
                 {       
-                    int count = 0;
+                    count = 0;
                     Intcode i = new Intcode(puzzleInput, phaseSequence);
                     while (!i.hasFinished)
                     {
-                        var xPosn = i.Run ();
+                        xPosn = i.Run();
                         count++;
-                        if (xPosn==2)
+                        if (xPosn!=1)
                         {
-                            Console.WriteLine("min value is " + count);
-                            return;
-                        }
-                        else if (xPosn==0)
-                        {
-                            if (!i.hasFinished)
+                            if (!i.hasFinished)  // This is required if xPosn is 0
                                 startingList.Remove(phaseSequence);
                             break;
                         }
                     }
                 }
             }
-
-            
-        }
-
-        static void buildUpFunction(List<List<int>> startingList)
-        {
-            List<List<int>> copyOfInput = new List<List<int>>(startingList);
-            //Initially would be 1, 2, 3, 4
-            foreach (var elem in copyOfInput)
-            {
-                switch(elem.Last())
-                {
-                    case 1:
-                    startingList.Add(new List<int>(elem).Concat(new List<int>(){1}).ToList());
-                    startingList.Add(new List<int>(elem).Concat(new List<int>(){3}).ToList());
-                    startingList.Add(new List<int>(elem).Concat(new List<int>(){4}).ToList());
-                    startingList.Remove(elem);
-                    break;
-                    case 2:
-                    startingList.Add(new List<int>(elem).Concat(new List<int>(){2}).ToList());
-                    startingList.Add(new List<int>(elem).Concat(new List<int>(){3}).ToList());
-                    startingList.Add(new List<int>(elem).Concat(new List<int>(){4}).ToList());
-                    startingList.Remove(elem);
-                    break;
-                    case 3:
-                    startingList.Add(new List<int>(elem).Concat(new List<int>(){1}).ToList());
-                    startingList.Add(new List<int>(elem).Concat(new List<int>(){2}).ToList());
-                    startingList.Add(new List<int>(elem).Concat(new List<int>(){3}).ToList());
-                    startingList.Remove(elem);
-                    break;
-                    case 4:
-                    startingList.Add(new List<int>(elem).Concat(new List<int>(){1}).ToList());
-                    startingList.Add(new List<int>(elem).Concat(new List<int>(){2}).ToList());
-                    startingList.Add(new List<int>(elem).Concat(new List<int>(){4}).ToList());
-                    startingList.Remove(elem);
-                    break;
-                    default:
-                    break;
-                }
-            }
-
-        }
-
-        static List<Int64> puzzleInputToList (string inputFilePath) {
-            var str = File.ReadLines (inputFilePath).First ();
-            var listOfInts = str.Split (',').Select (Int64.Parse).ToList ();
-            return listOfInts;
+            return count;
         }
     }
 }

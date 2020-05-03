@@ -26,12 +26,14 @@ namespace Day17
             char[][] chArray  = new char[height-1][];
 
             var sum = 0;
+            var yCoordStart = 0;
             
             for (int j=0; j<height-1; j++)
             {
                 chArray[j] = test[j].ToCharArray();
             }
-            for (int y=1; y<chArray.Length-1; y++)
+
+            /*for (int y=1; y<chArray.Length-1; y++)
             {
                 for (int x=1; x<chArray[0].Length-1; x++)
                 {
@@ -45,11 +47,11 @@ namespace Day17
                             //chArray[y][x] = 'O';
                     }
                 }
-            }
+            }*/
             foreach (var p in chArray)
                 Console.WriteLine(String.Join("", p));
 
-            Console.WriteLine(sum);
+            //Console.WriteLine(sum);
 
             // Identify coordinates where scaffold char is surrounded by other scaffold chars
         }

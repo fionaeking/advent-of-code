@@ -13,7 +13,9 @@ namespace Day16
             var originalInput = puzzleInputToList(Constants.INPUT_FILENAME);
             var prevOutputString = Enumerable.Repeat(originalInput, Constants.REPEAT).SelectMany(arr => arr).ToArray();
             var finalOutput = getOutputAfterPhase(prevOutputString, Constants.FINAL_PHASE);
+            Console.WriteLine(finalOutput);
             var messageOffset = getMessageOffset(originalInput, finalOutput.Length);
+            Console.WriteLine(messageOffset);
             Console.WriteLine($"First 8 digits after phase {Constants.FINAL_PHASE}: {String.Join("", finalOutput.Skip(messageOffset).Take(8))}");
         }
 
@@ -42,16 +44,23 @@ namespace Day16
             var basePattern = new int[4]{0, 1, 0, -1};
             for (int phase=1; phase<=finalPhase; phase++)
             {
+                Console.WriteLine("At phase " + phase);
                 newInputString = prevOutputString;
                 for (int i=0; i<newInputString.Length; i++)
                 {
+                    //Console.WriteLine("At integer " + i);
                     var basePatternRepeated = basePattern.SelectMany(t =>
                         Enumerable.Repeat(t, i+1)).ToList();
                     var summedTotal = 0;
                     var basePatternIndex = 1;
                     for (int j=0; j<newInputString.Length; j++)
+                    //for (int k = 0; k<newInputString.Length/2; k++)
                     {
-                        summedTotal += newInputString[j]*basePatternRepeated[basePatternIndex];
+                        var bp = basePatternRepeated[basePatternIndex];
+                        if (bp!=0)
+                        {
+                            summedTotal += newInputString[j]*bp;
+                        }
                         basePatternIndex = (basePatternIndex==basePatternRepeated.Count-1) ? 0 : basePatternIndex+1;
                     }
                     prevOutputString[i] = Math.Abs(summedTotal%10); //only take ones digit
@@ -59,5 +68,8 @@ namespace Day16
             }
             return prevOutputString;
         }
+
+        // Half of all basePatternIndex calculations will be 0 - can half the number of calculations
+
     }
 }

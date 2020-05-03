@@ -10,8 +10,6 @@ class Intcode
     public long outputValue;
     private long relativeBase;
     public bool hasFinished;
-    public long ballPosn;
-    public long paddlePosn;
     private List<int> newList;
     public Intcode(List<long> inputList, List<int> inputSeq)
     {
@@ -34,9 +32,7 @@ class Intcode
             incrementInstructionPointer(instructionLength);
             performInstruction(opcode, instructionValues);
             if (opcode == 4)
-            {
                 return outputValue;
-            }
             opcode = getOpcode();
         }
         hasFinished = true;
@@ -62,8 +58,7 @@ class Intcode
     {
         long instruction = puzzleInput[instructionPointer];
         // Only select last 2 digits for opcode
-        var opcode = Convert.ToInt32(instruction % 100);
-        return opcode;
+        return Convert.ToInt32(instruction % 100);
     }
 
     int checkInstruction(int opcode)
@@ -155,8 +150,7 @@ class Intcode
                 return input.Item1;
             case 2:
                 increaseComputerMemory(input.Item1 + relativeBase);
-                var test = puzzleInput[Convert.ToInt32(input.Item1 + relativeBase)];
-                return test;
+                return puzzleInput[Convert.ToInt32(input.Item1 + relativeBase)];
             default:
                 throw new Exception("Unrecognised mode");
         }
