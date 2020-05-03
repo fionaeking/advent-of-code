@@ -20,7 +20,6 @@ namespace Day12
         static void Main(string[] args)
         {
             long[] answers = new long[3];
-
             for (int posn=0; posn<3; posn++)
             {
                 List<List<int>> inputList = puzzleInputToList(Constants.INPUT_FILENAME);
@@ -33,15 +32,14 @@ namespace Day12
                 string firstVals = addFirstMoonValsToList(listOfMoons, posn);
                 for (long timestep=0; timestep < Constants.TIMESTEP; timestep++)
                 {
-                    //Compare pairs - 6 combinations
-                    callUpdateVelocities(listOfMoons, posn);
+                    callUpdateVelocities(listOfMoons, posn);  //Compare pairs - 6 combinations
                     for (int j=0; j<4; j++)
                     {
                         listOfMoons[j].updatePosition();
                     }
-
                     string moonValsFirst = addFirstMoonValsToList(listOfMoons, posn);
-                    if (firstVals == moonValsFirst){
+                    if (firstVals == moonValsFirst)
+                    {
                         Console.WriteLine("here timestamp: " + (timestep+1));
                         answers[posn] = timestep+1;
                         break;
@@ -53,22 +51,18 @@ namespace Day12
             startVal = Math.Max(startVal, answers[2]);
             var currVal = startVal;
 
-            while(true)
+            while(!(currVal%answers[0]==0 & currVal%answers[1]==0 & currVal%answers[2]==0))
             {
-                if (currVal%answers[0]==0 & currVal%answers[1]==0 & currVal%answers[2]==0)
-                {
-                    Console.WriteLine("LCM is " + currVal);
-                    break;
-                }
                 currVal += startVal;
             }
+            Console.WriteLine("LCM is " + currVal);
             //var totalEnergy = returnTotalEnergy(listOfMoons);
             //Console.WriteLine("Total energy: " + totalEnergy);
         }
 
         static string addFirstMoonValsToList(Moon[] moonList, int j)
         {
-            var str = "";
+            var str = String.Empty;
             for (int i=0; i<4; i++)
             {
                 str = String.Concat(str, String.Join(' ', moonList[i].returnFirstAsList(j)));
@@ -79,7 +73,7 @@ namespace Day12
 
         static string addValuesToList(Moon[] moonList)
         {
-            var str = "";
+            var str = String.Empty;
             for (int i=0; i<4; i++)
             {
                 str = str.Insert(str.Length, String.Join(',',moonList[i].returnValuesAsList()));
