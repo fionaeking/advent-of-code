@@ -10,44 +10,41 @@ namespace Day13
     {
         static void Main(string[] args)
         {
-            var puzzleInput = puzzleInputToList (Constants.INPUT_FILENAME);
-            Intcode i = new Intcode(puzzleInput);
+            Intcode i = new Intcode(puzzleInputToList(Constants.INPUT_FILENAME));
             Console.OutputEncoding = System.Text.Encoding.UTF8;
-            int[] tileCounter = new int[5];
+            //int[] tileCounter = new int[5];
             Dictionary<Tuple<int, int>, int> toDraw = new Dictionary<Tuple<int, int>, int>();
-            long score = 0;
+            int score = 0;
             while (!i.hasFinished)
             {
                 // Declaring separate variables to improve readability
-                var xPosn = i.Run ();
-                var yPosn = i.Run();
-                var tile = i.Run();
+                var xPosn = Convert.ToInt32(i.Run());
+                var yPosn = Convert.ToInt32(i.Run());
+                var tile = Convert.ToInt32(i.Run());
                 if(xPosn==-1 & yPosn==0)
                 {
                     score = tile;
                 }
                 else
                 {
-                    toDraw[new Tuple<int, int>(Convert.ToInt32(xPosn), Convert.ToInt32(yPosn))] = Convert.ToInt32(tile);
-                    if (0<=tile & tile<=4)
+                    toDraw[new Tuple<int, int>(xPosn, yPosn)] = tile;
+                    switch(tile)
                     {
-                        tileCounter[tile] += 1;
-                        if (tile==3)
-                        {
-                            i.paddlePosn = xPosn;
-                        }
-                        else if (tile==4)
-                        {
-                            i.ballPosn = xPosn;
-                        }
-                    }
-                    else
-                    {
-                        // End of program
+                        case 3: 
+                        i.paddlePosn = xPosn; 
                         break;
+                        case 4:
+                        i.ballPosn = xPosn;
+                        break;
+                        case 0:
+                        case 1:
+                        case 2:
+                        break;
+                        default:
+                        return;  // End of program 
                     }
                 }
-                drawGame(toDraw, Convert.ToInt32(score));
+                drawGame(toDraw, score);
             }
         }
 
@@ -57,7 +54,6 @@ namespace Day13
             StringBuilder s = new StringBuilder();
             Console.Clear();
             Console.SetWindowSize(43, 21);
-            //Console.OutputEncoding = System.Text.Encoding.GetEncoding(1252);
             Console.CursorVisible = false;
             var sortedList = pointsToDraw.OrderBy(key => key.Key.Item2).ThenBy(key => key.Key.Item1);
             int maxY = Int32.MinValue;
@@ -101,30 +97,19 @@ namespace Day13
         {
             switch(tile)
             {
-                case 0:
-                //empty
-                return " ";
-                case 1:
-                //wall
-                return $"{"\u25A8"}"; // "\\";
-                case 2:
-                //block
-                return $"{"\u25A1"}"; // $"{(char)0x2592}"; //"+";
-                case 3:
-                //horizontal paddle
-                return "_";
-                case 4:
-                // ball
-                return "o";
-                default:
-                return " ";
+                case 0: return " ";  //empty
+                case 1: return $"{"\u25A8"}"; //wall
+                case 2: return $"{"\u25A1"}";  //block
+                case 3: return "_";  //horizontal paddle
+                case 4: return "o";  // ball
+                default: return " ";
             }
         }
 
-        static List<Int64> puzzleInputToList (string inputFilePath) {
+        static List<Int64> puzzleInputToList (string inputFilePath) 
+        {
             var str = File.ReadLines (inputFilePath).First ();
-            var listOfInts = str.Split (',').Select (Int64.Parse).ToList ();
-            return listOfInts;
+            return str.Split (',').Select (Int64.Parse).ToList ();
         }
     }
 }

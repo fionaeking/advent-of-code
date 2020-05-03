@@ -93,7 +93,6 @@ class Intcode
     {
         long secondInput;
         long firstInput = getValueFromMode(instructionInputs[0]);
-        var validInput = false;
         switch (opcode)
         {
             case 1: // Addition
@@ -106,37 +105,28 @@ class Intcode
                 break;
             case 3:
                 long valueToWrite = 0;
-                while(!validInput)
-                {
+                //while(!validInput)
+                //{
                     //Console.WriteLine("Enter an input value");
                     //var valueRead = Console.ReadKey();
                     //if (valueRead.Key==ConsoleKey.LeftArrow)
-                    if (paddlePosn>ballPosn)
-                    {
-                        valueToWrite = -1;
-                        validInput = true;
-                    }
-                    //else if (valueRead.Key==ConsoleKey.RightArrow)
-                    else if(paddlePosn<ballPosn)
-                    {
-                        valueToWrite = 1;
-                        validInput = true;
-                    }
-                    else //if (valueRead.Key==ConsoleKey.DownArrow)
-                    {
-                        valueToWrite = 0;
-                        validInput = true;
-                    }
-                    /*else
-                    {
-                        Console.WriteLine("Invalid input");
-                    }*/
+                if (paddlePosn>ballPosn)
+                {
+                    valueToWrite = -1;
                 }
-                updateMemoryLocation(instructionInputs[0], valueToWrite); //nextInput));
+                //else if (valueRead.Key==ConsoleKey.RightArrow)
+                else if(paddlePosn<ballPosn)
+                {
+                    valueToWrite = 1;
+                }
+                else //if (valueRead.Key==ConsoleKey.DownArrow)
+                {
+                    valueToWrite = 0;
+                }
+                updateMemoryLocation(instructionInputs[0], valueToWrite);
                 break;
             case 4:
                 outputValue = firstInput;
-                //Console.WriteLine(firstInput);
                 break;
             case 5: //jump-if-true
                 if (firstInput != 0)
@@ -173,8 +163,7 @@ class Intcode
                 return input.Item1;
             case 2:
                 increaseComputerMemory(input.Item1 + relativeBase);
-                var test = puzzleInput[Convert.ToInt32(input.Item1 + relativeBase)];
-                return test;
+                return puzzleInput[Convert.ToInt32(input.Item1 + relativeBase)];
             default:
                 throw new Exception("Unrecognised mode");
         }
