@@ -52,7 +52,7 @@ class Moon
                 Vz += amount;
                 break;
             default:
-                break;
+                throw new Exception("Error - unrecognised input posnCount");   
         }
     }
 
@@ -97,18 +97,12 @@ class Moon
 
     public List<int> returnFirstAsList(int i)
     {
-        if(i==0)
+        switch(i)
         {
-            return new List<int>(){Px, Vx};
+            case 0: return new List<int>(){Px, Vx};
+            case 1: return new List<int>(){Py, Vy};
+            case 2: return new List<int>(){Pz, Vz};
+            default: throw new Exception("Error - unrecognised input i");   
         }
-        else if(i==1)
-        {
-            return new List<int>(){Py, Vy};
-        }
-        else
-        {
-            return new List<int>(){Pz, Vz};
-        }
-        
     }
 }
