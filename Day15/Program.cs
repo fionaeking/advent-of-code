@@ -18,35 +18,34 @@ namespace Day15
             Console.WriteLine("Min value is " + count);
         }
 
-        static void addElement(List<List<int>> startingList, List<int> elem, int numToAdd)
+        static void addElement(List<List<int>> listOfMoves, List<int> elem, int numToAdd)
         {
-            startingList.Add(new List<int>(elem).Concat(new List<int>(){numToAdd}).ToList());
+            listOfMoves.Add(new List<int>(elem).Concat(new List<int>(){numToAdd}).ToList());
         }
 
-        static void buildUpFunction(List<List<int>> startingList)
+        static void buildUpFunction(List<List<int>> listOfMoves)
         {
-            List<List<int>> copyOfInput = new List<List<int>>(startingList);
-            foreach (var elem in copyOfInput)
+            // Need to use copy of input
+            foreach (var elem in new List<List<int>>(listOfMoves))
             {
                 switch(elem.Last())
                 {
                     case 1:
                     case 2:
-                    addElement(startingList, elem, elem.Last());
-                    addElement(startingList, elem, 3);
-                    addElement(startingList, elem, 4);
-                    startingList.Remove(elem);
+                    addElement(listOfMoves, elem, elem.Last());
+                    addElement(listOfMoves, elem, 3);
+                    addElement(listOfMoves, elem, 4);
                     break;
                     case 3:
                     case 4:
-                    addElement(startingList, elem, 1);
-                    addElement(startingList, elem, 2);
-                    addElement(startingList, elem, elem.Last());
-                    startingList.Remove(elem);      
+                    addElement(listOfMoves, elem, 1);
+                    addElement(listOfMoves, elem, 2);
+                    addElement(listOfMoves, elem, elem.Last());   
                     break;
                     default:
                     break;
                 }
+                listOfMoves.Remove(elem);
             }
         }
 
@@ -63,11 +62,10 @@ namespace Day15
             while(xPosn!=2)
             {
                 buildUpFunction(startingList);
-                List<List<int>> copyOfInput = new List<List<int>>(startingList);
-                foreach (var phaseSequence in copyOfInput)
+                foreach (var inputValue in new List<List<int>>(startingList))
                 {       
                     count = 0;
-                    Intcode i = new Intcode(puzzleInput, phaseSequence);
+                    Intcode i = new Intcode(puzzleInput, inputValue);
                     while (!i.hasFinished)
                     {
                         xPosn = i.Run();
@@ -75,7 +73,7 @@ namespace Day15
                         if (xPosn!=1)
                         {
                             if (!i.hasFinished)  // This is required if xPosn is 0
-                                startingList.Remove(phaseSequence);
+                                startingList.Remove(inputValue);
                             break;
                         }
                     }
