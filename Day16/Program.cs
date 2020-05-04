@@ -34,8 +34,7 @@ namespace Day16
         static int[] puzzleInputToList (string inputFilePath) 
         {
             var inputAsString = File.ReadLines (inputFilePath).First();
-            var listOfInts = inputAsString.ToCharArray().Select(c => Convert.ToInt32(c.ToString())).ToArray();
-            return listOfInts;
+            return inputAsString.ToCharArray().Select(c => Convert.ToInt32(c.ToString())).ToArray();
         }
 
         static int[] getOutputAfterPhase(int[] prevOutputString, int finalPhase)
@@ -46,24 +45,22 @@ namespace Day16
             {
                 Console.WriteLine("At phase " + phase);
                 newInputString = prevOutputString;
-                for (int i=0; i<newInputString.Length; i++)
+                for (int newNumIndex=0; newNumIndex<newInputString.Length; newNumIndex++)
                 {
-                    //Console.WriteLine("At integer " + i);
                     var basePatternRepeated = basePattern.SelectMany(t =>
-                        Enumerable.Repeat(t, i+1)).ToList();
+                        Enumerable.Repeat(t, newNumIndex+1)).ToList();
                     var summedTotal = 0;
                     var basePatternIndex = 1;
-                    for (int j=0; j<newInputString.Length; j++)
-                    //for (int k = 0; k<newInputString.Length/2; k++)
+                    for (int num=0; num<newInputString.Length; num++)
                     {
                         var bp = basePatternRepeated[basePatternIndex];
                         if (bp!=0)
                         {
-                            summedTotal += newInputString[j]*bp;
+                            summedTotal += newInputString[num]*bp;
                         }
                         basePatternIndex = (basePatternIndex==basePatternRepeated.Count-1) ? 0 : basePatternIndex+1;
                     }
-                    prevOutputString[i] = Math.Abs(summedTotal%10); //only take ones digit
+                    prevOutputString[newNumIndex] = Math.Abs(summedTotal%10); //only take ones digit
                 }
             }
             return prevOutputString;
