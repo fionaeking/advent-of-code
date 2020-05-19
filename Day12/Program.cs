@@ -19,16 +19,19 @@ namespace Day12
     {
         static void Main(string[] args)
         {
+            long[] answers = getPeriodsForXYZ(Constants.INPUT_FILENAME);
+            Console.WriteLine("LCM is " + returnLCM(answers));
+            //var totalEnergy = returnTotalEnergy(listOfMoons);
+            //Console.WriteLine("Total energy: " + totalEnergy);
+        }
+
+        static long[] getPeriodsForXYZ(string inputFilepath)
+        {
             long[] answers = new long[3];
             for (int posn=0; posn<3; posn++)
             {
-                List<List<int>> inputList = puzzleInputToList(Constants.INPUT_FILENAME);
-                Moon[] listOfMoons = new Moon[4];
-                listOfMoons[0] = new Moon(inputList[0]);
-                listOfMoons[1] = new Moon(inputList[1]);
-                listOfMoons[2] = new Moon(inputList[2]);
-                listOfMoons[3] = new Moon(inputList[3]);
-
+                List<List<int>> inputList = puzzleInputToList(inputFilepath);
+                Moon[] listOfMoons = createListOfMoons(inputList);
                 string firstVals = addFirstMoonValsToList(listOfMoons, posn);
                 for (long timestep=0; timestep < Constants.TIMESTEP; timestep++)
                 {
@@ -46,7 +49,21 @@ namespace Day12
                     }
                 }
             }
+            return answers;
+        }
 
+        static Moon[] createListOfMoons(List<List<int>> inputList)
+        {
+            Moon[] listOfMoons = new Moon[4];
+            for (int i=0; i<4; i++)
+            {
+                listOfMoons[i] = new Moon(inputList[i]);
+            }
+            return listOfMoons;
+        }
+
+        static long returnLCM(long[] answers)
+        {
             var startVal = Math.Max(answers[0], answers[1]);
             startVal = Math.Max(startVal, answers[2]);
             var currVal = startVal;
@@ -55,11 +72,8 @@ namespace Day12
             {
                 currVal += startVal;
             }
-            Console.WriteLine("LCM is " + currVal);
-            //var totalEnergy = returnTotalEnergy(listOfMoons);
-            //Console.WriteLine("Total energy: " + totalEnergy);
+            return currVal;
         }
-
         static string addFirstMoonValsToList(Moon[] moonList, int j)
         {
             var str = String.Empty;
