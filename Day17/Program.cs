@@ -24,16 +24,25 @@ namespace Day17
             var test = outputString.Split("\n");
             var height = test.Length-2;
             char[][] chArray  = new char[height-1][];
-
-            var sum = 0;
-            var yCoordStart = 0;
             
             for (int j=0; j<height-1; j++)
             {
                 chArray[j] = test[j].ToCharArray();
             }
 
-            /*for (int y=1; y<chArray.Length-1; y++)
+            
+            foreach (var p in chArray)
+                Console.WriteLine(String.Join("", p));
+            // Console.WriteLine(calculateSumForPartOne(chArray));
+            
+            // Identify coordinates where scaffold char is surrounded by other scaffold chars
+        }
+
+        static int calculateSumForPartOne(char[][] chArray)
+        {
+            // Code below is for calculating sum for part 1
+            var sum = 0;
+            for (int y=1; y<chArray.Length-1; y++)
             {
                 for (int x=1; x<chArray[0].Length-1; x++)
                 {
@@ -47,13 +56,8 @@ namespace Day17
                             //chArray[y][x] = 'O';
                     }
                 }
-            }*/
-            foreach (var p in chArray)
-                Console.WriteLine(String.Join("", p));
-
-            //Console.WriteLine(sum);
-
-            // Identify coordinates where scaffold char is surrounded by other scaffold chars
+            }
+            return sum;
         }
 
         static List<Int64> puzzleInputToList (string inputFilePath) {
