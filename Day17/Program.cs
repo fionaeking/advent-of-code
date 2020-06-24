@@ -30,12 +30,38 @@ namespace Day17
                 chArray[j] = test[j].ToCharArray();
             }
 
-            
             foreach (var p in chArray)
                 Console.WriteLine(String.Join("", p));
             // Console.WriteLine(calculateSumForPartOne(chArray));
             
             // Identify coordinates where scaffold char is surrounded by other scaffold chars
+
+            // Print out coordinate of current position marker
+            var tupleCurrPosn = currPosnMarker(chArray);
+            Console.WriteLine($"{tupleCurrPosn.Item1}, {tupleCurrPosn.Item2}");
+
+
+
+        }
+
+        static Tuple<int, int> currPosnMarker(char[][] chArray)
+        {
+            var tupleToReturn = new Tuple<int, int>(0, 0);
+            for (int ycoord=0; ycoord<chArray.Length-1; ycoord++)
+            {
+                if (chArray[ycoord].Contains('^')|chArray[ycoord].Contains('<')|chArray[ycoord].Contains('>'))
+                {
+                    Console.WriteLine("Yes");
+                    for (int xcoord=0; xcoord<chArray[ycoord].Length-1; xcoord++)
+                    {
+                        if (chArray[ycoord][xcoord]=='^')
+                        {
+                            tupleToReturn = new Tuple<int, int>(xcoord, ycoord);
+                        } 
+                    }
+                }
+            }
+        return tupleToReturn;
         }
 
         static int calculateSumForPartOne(char[][] chArray)
