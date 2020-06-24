@@ -46,9 +46,9 @@ class Dealer {
             inputArray = outputArray;
         }
 
-        public int[] getCardDeck()
+        public int getPositionOfValue(int val)
         {
-            return inputArray;
+            return Array.IndexOf(inputArray, val);
         }
     }
 }

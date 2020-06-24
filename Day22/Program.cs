@@ -33,9 +33,7 @@ namespace Day22
                 }
             }
             
-            //Console.WriteLine(String.Join(",", d.getCardDeck()));
-            var outputArray = d.getCardDeck();
-            Console.WriteLine(Array.IndexOf(outputArray, 2019));
+            Console.WriteLine(d.getPositionOfValue(2019));
         }
 
         static IEnumerable<string> puzzleInputToList (string inputFilePath) 
