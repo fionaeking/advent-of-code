@@ -12,34 +12,38 @@ namespace Day22
     {
         static void Main(string[] args)
         {
-            //var inputList = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-            var inputList = Enumerable.Range(0, 10007).ToArray();
-            var d = new Dealer(inputList);
-            IEnumerable<string> i = puzzleInputToList("Input.txt");
+            int inputRange = 10;
+            var inputList = Enumerable.Range(0, inputRange).ToArray();
+            IEnumerable<string> inputInstructions = puzzleInputToList("Input.txt");
 
-            foreach(var t in i)
+            var dealer = new Dealer(inputList);
+            foreach(var instr in inputInstructions)
             {
-                if (t.StartsWith("cut"))
-                {
-                    d.cut(Int32.Parse(t.Replace("cut ", "")));
-                }
-                else if (t.EndsWith("stack"))
-                {
-                    d.dealIntoNewStack();
-                }
-                else
-                {
-                    d.dealWithIncrement(Int32.Parse(t.Replace("deal with increment ", "")));
-                }
+                performShufflingTechnique(dealer, instr);
             }
-            
-            Console.WriteLine(d.getPositionOfValue(2019));
+            dealer.printOutCardDeck();
+            //Console.WriteLine(dealer.getPositionOfValue(2019));
         }
 
         static IEnumerable<string> puzzleInputToList (string inputFilePath) 
         {
-            var str = File.ReadLines (inputFilePath);
-            return str;
+            return File.ReadLines (inputFilePath);
+        }
+
+        static void performShufflingTechnique(Dealer d, string instr)
+        {
+            if (instr.StartsWith("cut"))
+            {
+                d.cut(Int32.Parse(instr.Replace("cut ", "")));
+            }
+            else if (instr.EndsWith("stack"))
+            {
+                d.dealIntoNewStack();
+            }
+            else
+            {
+                d.dealWithIncrement(Int32.Parse(instr.Replace("deal with increment ", "")));
+            }
         }
     
     }
