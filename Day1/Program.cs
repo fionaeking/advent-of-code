@@ -36,10 +36,7 @@ namespace Day1Puzzle1
         {
             //Finds the fuel required for a module
             //Takes its mass, divides by three, rounds down and subtracts 2
-            float varOne = divideByNum(mass, 3);
-            int varTwo = roundDown(varOne);
-            int varThree = subtractNum(varTwo, 2);
-            return varThree;
+            return subtractNum(roundDown(divideByNum(mass, 3)), 2);
         }
 
         static int calculateTotalFuelConsumption(List<string> listOfInputs)
