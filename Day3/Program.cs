@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 
 // Program to find the intersection point closest to the origin of two wires
+// N.B. Very over-complicated!
 
 namespace Day3
 {
@@ -19,15 +20,13 @@ namespace Day3
         static List<Tuple<int, int>> getPuzzleInputCoordinates(string inputFilepath)
         {
             List<string> inputList = puzzleInputToList(inputFilepath);
-            List<Tuple<int, int>> coords = getCoordinates(inputList);
-            return coords;
+            return getCoordinates(inputList);
         }
 
         static List<string> puzzleInputToList(string inputFilePath)
         {
             var str = File.ReadLines(inputFilePath).First();
-            var listOfInstructions = str.Split(',').ToList();
-            return listOfInstructions;
+            return str.Split(',').ToList();
         }
 
         static List<Tuple<int, int>> getCoordinates(List<string> inputList)
@@ -86,16 +85,7 @@ namespace Day3
             {
                 int x = (B2 * C1 - B1 * C2) / delta;
                 int y = (A1 * C2 - A2 * C1) / delta;
-                if ((x == 0 & y == 0) | x < 0 | y < 0)
-                {
-                    return null;
-                }
-                else
-                {
-                    Tuple<int, int> intersectPoint = Tuple.Create(x, y);
-                    //Console.WriteLine($"{intersectPoint.Item1}, {intersectPoint.Item2}");
-                    return intersectPoint;
-                }
+                return ((x == 0 & y == 0) | x < 0 | y < 0) ? null : Tuple.Create(x, y);
             }
         }
 
