@@ -2,6 +2,7 @@
 using System.Collections.Generic;  
 using System.IO;
 using System.Linq;
+using static Utilities.Utilities;
 
 //Program to calculate fuel required to launch a number of given modules
 //based on their mass.
@@ -12,24 +13,13 @@ namespace Day1Puzzle1
     {
         static void Main(string[] args)
         {
-            var inputNumList = File.ReadLines("MassOfModules.txt").ToList();
-            var outputNum = calculateTotalFuelConsumption(inputNumList);
-            Console.WriteLine("Fuel consumption: " + outputNum);
+            var inputNumList = returnInputAsList();
+            Console.WriteLine("Fuel consumption: " + calculateTotalFuelConsumption(inputNumList));
         }
 
-        static int roundDown(float varOne)
+        static List<string> returnInputAsList()
         {
-            return Convert.ToInt32(varOne);
-        }
-
-        static float divideByNum(int input_num, int divisor)
-        {
-            return input_num/divisor;
-        }
-
-        static int subtractNum(int original_num, int num_to_subtract)
-        {
-            return original_num - num_to_subtract;
+            return File.ReadLines(Constants.INPUT_FILENAME).ToList();
         }
 
         static int calculateFuelConsumption(int mass)
