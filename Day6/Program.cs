@@ -10,7 +10,7 @@ namespace Day6
         static void Main(string[] args)
         {
             Dictionary<string, List<string>> orbitingObjects;
-            orbitingObjects = getOrbitsFromFile(@"input.txt");
+            orbitingObjects = getOrbitsFromFile(Constants.INPUT_FILENAME);
             //Now I have a dictionary of each parents and its children
             //But I want a count of each child and its parents
             var orbitTotal = 0;
@@ -32,7 +32,7 @@ namespace Day6
                 }
 
             }*/
-            findCommonParent("SAN", "YOU", orbitingObjects);
+            findCommonParent(Constants.SAN, Constants.YOU, orbitingObjects);
         }
 
         static Dictionary<string, List<string>> getOrbitsFromFile(string inputFilepath)
@@ -59,18 +59,15 @@ namespace Day6
             return count;
         }
 
-        static void findCommonParent(string one, string two, Dictionary<string, List<string>> orbits)
+        static void findCommonParent(string firstvalue, string secondvalue, Dictionary<string, List<string>> orbits)
         {
-            var firstvalue = one;
-            var secondvalue = two;
-
             var firstParent = findParent(firstvalue, orbits);
             var secondParent = findParent(secondvalue, orbits);
             var countOne = 0;
             while(firstParent!=secondParent)
             {
                 var countTwo = 0;
-                while (secondParent!="COM")
+                while (secondParent!=Constants.COM)
                 {
                     if (firstParent == secondParent)
                     {

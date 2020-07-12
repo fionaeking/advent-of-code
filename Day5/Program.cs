@@ -2,6 +2,8 @@
 using System.IO;
 using System.Linq;
 
+// Main code
+
 namespace Day5
 {
     class Program
@@ -16,8 +18,7 @@ namespace Day5
         static List<int> puzzleInputToList(string inputFilePath)
         {
             var str = File.ReadLines(inputFilePath).First();
-            var listOfInts = str.Split(',').Select(int.Parse).ToList();
-            return listOfInts;
+            return str.Split(',').Select(int.Parse).ToList();
         }
     }
 }

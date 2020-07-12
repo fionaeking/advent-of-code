@@ -32,8 +32,7 @@ namespace Day7
         static List<int> puzzleInputToList(string inputFilePath)
         {
             var str = File.ReadLines(inputFilePath).First();
-            var listOfInts = str.Split(',').Select(int.Parse).ToList();
-            return listOfInts;
+            return str.Split(',').Select(int.Parse).ToList();
         }
 
         static int runFeedbackLoop(IEnumerable<int> phaseSequence)

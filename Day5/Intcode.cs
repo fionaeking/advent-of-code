@@ -29,15 +29,12 @@ class Intcode
             opcode = getOpcode(puzzleInput[instructionPointer]);
             instructionLength = checkInstruction(opcode);
         }
-        Console.WriteLine("End of program");
-        Console.WriteLine("The diagnostic code is {0}", outputDiagnosticCodes.LastOrDefault());
-        return;
+        printOutDiagnosticCode(outputDiagnosticCodes.LastOrDefault());
     }
 
     List<Tuple<int, int>> getInputValues(List<int> inputNumList, int offset, int length)
     {
         var inputValues = new List<Tuple<int, int>>();
-
         //Check instruction - remove opcode (last 2 digits)
         int instruction = inputNumList[offset];
         int currDigits = instruction / 100;
@@ -46,7 +43,6 @@ class Intcode
             //inputValues.Add(inputNumList[i+offset]);
             int mode = currDigits % 10;
             inputValues.Add(new Tuple<int, int>(inputNumList[i + offset], mode));
-
             currDigits /= 10;
         }
         return inputValues;
@@ -145,5 +141,10 @@ class Intcode
         instructionPointer += instructionLength;
     }
 
+    void printOutDiagnosticCode(int code)
+    {
+        Console.WriteLine("End of program");
+        Console.WriteLine("The diagnostic code is {0}", code);
+    }
 
 }

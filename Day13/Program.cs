@@ -97,19 +97,19 @@ namespace Day13
         {
             switch(tile)
             {
-                case 0: return " ";  //empty
+                case 0: return Constants.EMPTY;
                 case 1: return $"{"\u25A8"}"; //wall
                 case 2: return $"{"\u25A1"}";  //block
-                case 3: return "_";  //horizontal paddle
-                case 4: return "o";  // ball
-                default: return " ";
+                case 3: return Constants.HORIZONTAL_PADDLE;
+                case 4: return Constants.BALL;
+                default: return Constants.EMPTY;
             }
         }
 
         static List<Int64> puzzleInputToList (string inputFilePath) 
         {
-            var str = File.ReadLines (inputFilePath).First ();
-            return str.Split (',').Select (Int64.Parse).ToList ();
+            var str = File.ReadLines(inputFilePath).First();
+            return str.Split (',').Select (Int64.Parse).ToList();
         }
     }
 }

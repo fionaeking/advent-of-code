@@ -8,11 +8,9 @@ namespace Day8
     {
         static void Main(string[] args)
         {
-            string inputString = File.ReadAllText("Input.txt");
+            string inputString = File.ReadAllText(Constants.INPUT_FILENAME);
             //string inputString = "0222112222120000";
-            var width = 25;
-            var tall = 6;
-            var layers = getLayers(inputString, width, tall);
+            var layers = getLayers(inputString, Constants.WIDTH, Constants.HEIGHT);
 
             // Part 1
             // var answer = returnOneTimesTwoDigits(layers);
@@ -26,7 +24,7 @@ namespace Day8
                 {
                     for (int layer = 0; layer < layers.Count; layer++)
                     {
-                        // FIrst 0 - Select list for first layer
+                        // First 0 - Select list for first layer
                         // Second 0 - Select first string in that list
                         // Third 0 -  Select first character in that string
                         if (layers[layer][str][ch] != '2')
@@ -39,10 +37,9 @@ namespace Day8
                 }
             }
             string finalImageAsString = String.Join("", finalImage);
-
-            for (int i = 0; i < finalImageAsString.Length; i += width)
+            for (int i = 0; i < finalImageAsString.Length; i += Constants.WIDTH)
             {
-                Console.WriteLine(finalImageAsString.Substring(i, width).Replace('0', ' '));
+                Console.WriteLine(finalImageAsString.Substring(i, Constants.WIDTH).Replace('0', ' '));
             }
         }
 
@@ -56,9 +53,8 @@ namespace Day8
             {
                 count++;
                 firstList.Add(inputString.Substring(i, width));
-                if (count % tall == 0)
+                if (count % tall == 0)  //New layer
                 {
-                    //New layer
                     layers.Add(firstList);
                     firstList = new List<string>();
                 }

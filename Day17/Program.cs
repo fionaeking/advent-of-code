@@ -1,7 +1,4 @@
-﻿using System.Net;
-using System.Xml.Linq;
-using System.Text;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -39,8 +36,6 @@ namespace Day17
             // Print out coordinate of current position marker
             var tupleCurrPosn = currPosnMarker(chArray);
             Console.WriteLine($"{tupleCurrPosn.Item1}, {tupleCurrPosn.Item2}");
-
-
 
         }
 
@@ -88,8 +83,7 @@ namespace Day17
 
         static List<Int64> puzzleInputToList (string inputFilePath) {
             var str = File.ReadLines (inputFilePath).First ();
-            var listOfInts = str.Split (',').Select (Int64.Parse).ToList ();
-            return listOfInts;
+            return str.Split (',').Select (Int64.Parse).ToList ();
         }
 
         static char asciiToChar(long inputToConvert)
