@@ -83,15 +83,15 @@ class Intcode
         // Return length of instruction
         switch (opcode)
         {
-            case 1: return 4;
-            case 2: return 4;
-            case 3: return 2;
-            case 4: return 2;
-            case 5: return 3;
-            case 6: return 3;
-            case 7: return 4;
-            case 8: return 4;
-            case 99: return 0;
+            case Constants.ADDITION:
+            case Constants.MULTIPLICATION: 
+            case Constants.SLT: 
+            case Constants.SET_ON_EQUAL: return 4;
+            case Constants.INPUT:
+            case Constants.OUTPUT: return 2;
+            case Constants.BEQ: 
+            case Constants.BNE: return 3;
+            case Constants.END_OF_PROGRAM: return 0;
             default: throw new Exception("Error - unrecognised opcode");
         }
     }
@@ -101,18 +101,18 @@ class Intcode
         //var outputValue = 0;
         switch (opcode)
         {
-            case 1:  // Addition
+            case Constants.ADDITION:
                 firstInt = getValueFromMode(puzzleInput, instructionValues[0]);
                 secondInt = getValueFromMode(puzzleInput, instructionValues[1]);
                 // Note to self - using list mutability
                 puzzleInput[instructionValues[2].Item1] = firstInt + secondInt;
-                break;
-            case 2:  // Multiplication
+                return;
+            case Constants.MULTIPLICATION:
                 firstInt = getValueFromMode(puzzleInput, instructionValues[0]);
                 secondInt = getValueFromMode(puzzleInput, instructionValues[1]);
                 puzzleInput[instructionValues[2].Item1] = firstInt * secondInt;
-                break;
-            case 3:
+                return;
+            case Constants.INPUT:
                 if (!phaseIsSet)
                 {
                     puzzleInput[instructionValues[0].Item1] = phaseSetting;
@@ -125,31 +125,29 @@ class Intcode
                 //Console.WriteLine("Enter an input value");
                 //puzzleInput[instructionValues[0].Item1] = Convert.ToInt32(Console.ReadLine());
                 break;
-            case 4:
+            case Constants.OUTPUT:
                 outputValue = getValueFromMode(puzzleInput, instructionValues[0]);
                 break;
-            case 5:
-                //jump-if-true
+            case Constants.BEQ:
                 firstInt = getValueFromMode(puzzleInput, instructionValues[0]);
                 if (firstInt != 0)
                 {
                     instructionPointer = getValueFromMode(puzzleInput, instructionValues[1]);
                 }
-                break;
-            case 6:
-                //jump-if-false: 
+                return;
+            case Constants.BNE:
                 firstInt = getValueFromMode(puzzleInput, instructionValues[0]);
                 if (firstInt == 0)
                 {
                     instructionPointer = getValueFromMode(puzzleInput, instructionValues[1]);
                 }
-                break;
-            case 7:
+                return;
+            case Constants.SLT:
                 firstInt = getValueFromMode(puzzleInput, instructionValues[0]);
                 secondInt = getValueFromMode(puzzleInput, instructionValues[1]);
                 puzzleInput[instructionValues[2].Item1] = (firstInt < secondInt) ? 1 : 0;
                 break;
-            case 8:
+            case Constants.SET_ON_EQUAL:
                 firstInt = getValueFromMode(puzzleInput, instructionValues[0]);
                 secondInt = getValueFromMode(puzzleInput, instructionValues[1]);
                 puzzleInput[instructionValues[2].Item1] = (firstInt == secondInt) ? 1 : 0;

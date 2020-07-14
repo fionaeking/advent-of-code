@@ -70,22 +70,17 @@ class Intcode
         // Return length of instruction
         switch (opcode)
         {
-            case 1:
-            case 2:
-            case 7:
-            case 8:
-                return 4;
-            case 3:
-            case 4:
-            case 9:
-                return 2;
-            case 5:
-            case 6:
-                return 3;
-            case 99:
-                return 0;
-            default:
-                throw new Exception("Error - unrecognised opcode");
+            case Constants.ADDITION:
+            case Constants.MULTIPLICATION: 
+            case Constants.SLT: 
+            case Constants.SET_ON_EQUAL: return 4;
+            case Constants.INPUT:
+            case Constants.OUTPUT:
+            case Constants.RELATIVE_BASE: return 2;
+            case Constants.BEQ: 
+            case Constants.BNE: return 3;
+            case Constants.END_OF_PROGRAM: return 0;
+            default: throw new Exception("Error - unrecognised opcode");
         }
     }
 
@@ -95,15 +90,15 @@ class Intcode
         long firstInput = getValueFromMode(instructionInputs[0]);
         switch (opcode)
         {
-            case 1: // Addition
+            case Constants.ADDITION:
                 secondInput = getValueFromMode(instructionInputs[1]);
                 updateMemoryLocation(instructionInputs[2], firstInput + secondInput);
                 break;
-            case 2: // Multiplication
+            case Constants.MULTIPLICATION:
                 secondInput = getValueFromMode(instructionInputs[1]);
                 updateMemoryLocation(instructionInputs[2], firstInput * secondInput);
                 break;
-            case 3:
+            case Constants.INPUT:
                 long valueToWrite = 0;
                 //while(!validInput)
                 //{
@@ -125,26 +120,26 @@ class Intcode
                 }
                 updateMemoryLocation(instructionInputs[0], valueToWrite);
                 break;
-            case 4:
+            case Constants.OUTPUT:
                 outputValue = firstInput;
                 break;
-            case 5: //jump-if-true
+            case Constants.BEQ:
                 if (firstInput != 0)
                     instructionPointer = Convert.ToInt32(getValueFromMode(instructionInputs[1]));
                 break;
-            case 6: //jump-if-false: 
+            case Constants.BNE:
                 if (firstInput == 0)
                     instructionPointer = Convert.ToInt32(getValueFromMode(instructionInputs[1]));
                 break;
-            case 7:
+            case Constants.SLT:
                 secondInput = getValueFromMode(instructionInputs[1]);
                 updateMemoryLocation(instructionInputs[2], (firstInput < secondInput) ? 1 : 0);
                 break;
-            case 8:
+            case Constants.SET_ON_EQUAL:
                 secondInput = getValueFromMode(instructionInputs[1]);
                 updateMemoryLocation(instructionInputs[2], (firstInput == secondInput) ? 1 : 0);
                 break;
-            case 9:
+            case Constants.RELATIVE_BASE:
                 relativeBase += firstInput;
                 break;
             default:
