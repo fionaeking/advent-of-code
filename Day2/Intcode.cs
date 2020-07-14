@@ -40,28 +40,22 @@ namespace Day2
             //Return length of instruction
             switch (puzzleInput[instructionPointer])
             {
-                case 1: return 4;
-                case 2: return 4;
-                case 99: return 0;
+                case Constants.ADDITION:
+                case Constants.MULTIPLICATION: return 4;
+                case Constants.END_OF_PROGRAM: return 0;
                 default: throw new Exception("Error - unrecognised opcode");
             }
         }
-        void performInstruction(List<int> instructionValues)
+        void performInstruction(List<int> instructions)
         {
-            int firstInt, secondInt;
-            var opcode = instructionValues[0];
+            var opcode = instructions[0];
             switch (opcode)
             {
-                case 1:  // Addition
-                    firstInt = getValueFromPosn(instructionValues[1]);
-                    secondInt = getValueFromPosn(instructionValues[2]);
-                    // Note to self - using list mutability
-                    puzzleInput[instructionValues[3]] = firstInt + secondInt;
+                case Constants.ADDITION:
+                    puzzleInput[instructions[3]] = getValueFromPosn(instructions[1]) + getValueFromPosn(instructions[2]);
                     break;
-                case 2:  // Multiplication
-                    firstInt = getValueFromPosn(instructionValues[1]);
-                    secondInt = getValueFromPosn(instructionValues[2]);
-                    puzzleInput[instructionValues[3]] = firstInt * secondInt;
+                case Constants.MULTIPLICATION:
+                    puzzleInput[instructions[3]] = getValueFromPosn(instructions[1]) * getValueFromPosn(instructions[2]);
                     break;
                 default:
                     throw new Exception("Unrecognised input");
