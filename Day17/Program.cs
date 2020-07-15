@@ -67,12 +67,12 @@ namespace Day17
             {
                 for (int x=1; x<chArray[0].Length-1; x++)
                 {
-                    if (chArray[y][x]=='#')
+                    if (chArray[y][x]==Constants.SCAFFOLD)
                     {
-                        if (chArray[y-1][x]=='#' & 
-                            chArray[y+1][x]=='#' &
-                            chArray[y][x+1]=='#' &
-                            chArray[y][x-1]=='#')
+                        if (chArray[y-1][x]==Constants.SCAFFOLD & 
+                            chArray[y+1][x]==Constants.SCAFFOLD &
+                            chArray[y][x+1]==Constants.SCAFFOLD &
+                            chArray[y][x-1]==Constants.SCAFFOLD)
                             sum += (x*y);
                             //chArray[y][x] = 'O';
                     }

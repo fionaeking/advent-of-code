@@ -48,9 +48,8 @@ class Intcode
     int getOpcode()
     {
         long instruction = puzzleInput[instructionPointer];
-        // Only select last 2 digits for opcode
-        var opcode = Convert.ToInt32(instruction % 100);
-        return opcode;
+        // Return opcode (last 2 digits)
+        return Convert.ToInt32(instruction % 100);
     }
 
     int checkInstruction(int opcode)
@@ -72,42 +71,42 @@ class Intcode
         }
     }
 
-    void performInstruction(int opcode, List<Tuple<long, long>> instructionInputs)
+    void performInstruction(int opcode, List<Tuple<long, long>> instructions)
     {
         long secondInput;
-        long firstInput = getValueFromMode(instructionInputs[0]);
+        long firstInput = getValueFromMode(instructions[0]);
         switch (opcode)
         {
             case Constants.ADDITION:
-                secondInput = getValueFromMode(instructionInputs[1]);
-                updateMemoryLocation(instructionInputs[2], firstInput + secondInput);
+                secondInput = getValueFromMode(instructions[1]);
+                updateMemoryLocation(instructions[2], firstInput + secondInput);
                 break;
             case Constants.MULTIPLICATION:
-                secondInput = getValueFromMode(instructionInputs[1]);
-                updateMemoryLocation(instructionInputs[2], firstInput * secondInput);
+                secondInput = getValueFromMode(instructions[1]);
+                updateMemoryLocation(instructions[2], firstInput * secondInput);
                 break;
             case Constants.INPUT:
                 Console.WriteLine("Enter an input value");
-                updateMemoryLocation(instructionInputs[0], Convert.ToInt64(Console.ReadLine()));
+                updateMemoryLocation(instructions[0], Convert.ToInt64(Console.ReadLine()));
                 break;
             case Constants.OUTPUT:
                 Console.WriteLine(firstInput); // Write value to output
                 break;
             case Constants.BEQ:
                 if (firstInput != 0)
-                    instructionPointer = Convert.ToInt32(getValueFromMode(instructionInputs[1]));
+                    instructionPointer = Convert.ToInt32(getValueFromMode(instructions[1]));
                 break;
             case Constants.BNE:
                 if (firstInput == 0)
-                    instructionPointer = Convert.ToInt32(getValueFromMode(instructionInputs[1]));
+                    instructionPointer = Convert.ToInt32(getValueFromMode(instructions[1]));
                 break;
             case Constants.SLT:
-                secondInput = getValueFromMode(instructionInputs[1]);
-                updateMemoryLocation(instructionInputs[2], (firstInput < secondInput) ? 1 : 0);
+                secondInput = getValueFromMode(instructions[1]);
+                updateMemoryLocation(instructions[2], (firstInput < secondInput) ? 1 : 0);
                 break;
             case Constants.SET_ON_EQUAL:
-                secondInput = getValueFromMode(instructionInputs[1]);
-                updateMemoryLocation(instructionInputs[2], (firstInput == secondInput) ? 1 : 0);
+                secondInput = getValueFromMode(instructions[1]);
+                updateMemoryLocation(instructions[2], (firstInput == secondInput) ? 1 : 0);
                 break;
             case Constants.RELATIVE_BASE:
                 relativeBase += firstInput;

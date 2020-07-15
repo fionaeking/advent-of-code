@@ -6,7 +6,7 @@ using System;
 namespace Day7
 {
     class Program
-    {  //0,1,2,3,4
+    {
         static void Main(string[] args)
         {
             int max = 0;
@@ -39,17 +39,17 @@ namespace Day7
         {
             List<int> phaseList = phaseSequence.ToList();
             int outputSignal;
-            var amps = new List<Intcode>();
+            var ampsList = new List<Intcode>();
             foreach (var phaseSetting in phaseSequence)
             {
-                Intcode amp = new Intcode("A", phaseSetting);
-                amp.puzzleInput = puzzleInputToList(Constants.INPUT_FILENAME);
-                amps.Add(amp);
+                Intcode a = new Intcode("A", phaseSetting);
+                a.puzzleInput = puzzleInputToList(Constants.INPUT_FILENAME);
+                ampsList.Add(a);
             }
             outputSignal = 0;
-            while (!amps[amps.Count - 1].hasFinished)
+            while (!ampsList[ampsList.Count - 1].hasFinished)
             {
-                foreach (var amp in amps)
+                foreach (var amp in ampsList)
                 {
                     outputSignal = amp.Run(outputSignal);
                 }
@@ -58,7 +58,7 @@ namespace Day7
         }
 
 
-        //TODO/Confession - Took this function below off StackOverflow...
+        //TODO
         static IEnumerable<IEnumerable<int>> getCombinations(IEnumerable<int> list, int length)
         {
             if (length == 1) return list.Select(t => new int[] { t });

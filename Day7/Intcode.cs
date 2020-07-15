@@ -38,7 +38,7 @@ class Intcode
         while (opcode != 99)
         {
             //Get parameter modes for each value in instruction
-            var instructionValues = getInputValues(puzzleInput, instructionPointer, instructionLength);
+            var instructionValues = getInputValues(instructionPointer, instructionLength);
             // Get instruction pointer for next loop
             incrementInstructionPointer(instructionLength);
             performInstruction(opcode, instructionValues, newInputValue);
@@ -53,17 +53,17 @@ class Intcode
         return outputValue;
     }
 
-    List<Tuple<int, int>> getInputValues(List<int> inputNumList, int offset, int length)
+    List<Tuple<int, int>> getInputValues(int offset, int length)
     {
         var inputValues = new List<Tuple<int, int>>();
 
         //Check instruction - remove opcode (last 2 digits)
-        int instruction = inputNumList[offset];
+        int instruction = puzzleInput[offset];
         int currDigits = instruction / 100;
         for (int i = 1; i < length; i++)
         {
             int mode = currDigits % 10;
-            inputValues.Add(new Tuple<int, int>(inputNumList[i + offset], mode));
+            inputValues.Add(new Tuple<int, int>(puzzleInput[i + offset], mode));
 
             currDigits /= 10;
         }
@@ -95,71 +95,60 @@ class Intcode
             default: throw new Exception("Error - unrecognised opcode");
         }
     }
-    void performInstruction(int opcode, List<Tuple<int, int>> instructionValues, int newInputValue)
+    void performInstruction(int opcode, List<Tuple<int, int>> instructions, int newInputValue)
     {
         int firstInt, secondInt;
         //var outputValue = 0;
         switch (opcode)
         {
             case Constants.ADDITION:
-                firstInt = getValueFromMode(puzzleInput, instructionValues[0]);
-                secondInt = getValueFromMode(puzzleInput, instructionValues[1]);
-                // Note to self - using list mutability
-                puzzleInput[instructionValues[2].Item1] = firstInt + secondInt;
+                puzzleInput[instructions[2].Item1] = getValueFromMode(instructions[0]) + getValueFromMode(instructions[1]);
                 return;
             case Constants.MULTIPLICATION:
-                firstInt = getValueFromMode(puzzleInput, instructionValues[0]);
-                secondInt = getValueFromMode(puzzleInput, instructionValues[1]);
-                puzzleInput[instructionValues[2].Item1] = firstInt * secondInt;
+                puzzleInput[instructions[2].Item1] = getValueFromMode(instructions[0]) * getValueFromMode(instructions[1]);
                 return;
             case Constants.INPUT:
                 if (!phaseIsSet)
                 {
-                    puzzleInput[instructionValues[0].Item1] = phaseSetting;
+                    puzzleInput[instructions[0].Item1] = phaseSetting;
                     phaseIsSet = true;
                 }
                 else
                 {
-                    puzzleInput[instructionValues[0].Item1] = newInputValue;
+                    puzzleInput[instructions[0].Item1] = newInputValue;
                 }
                 //Console.WriteLine("Enter an input value");
-                //puzzleInput[instructionValues[0].Item1] = Convert.ToInt32(Console.ReadLine());
+                //puzzleInput[instructions[0].Item1] = Convert.ToInt32(Console.ReadLine());
                 break;
             case Constants.OUTPUT:
-                outputValue = getValueFromMode(puzzleInput, instructionValues[0]);
+                outputValue = getValueFromMode(instructions[0]);
                 break;
             case Constants.BEQ:
-                firstInt = getValueFromMode(puzzleInput, instructionValues[0]);
-                if (firstInt != 0)
+                if (getValueFromMode(instructions[0]) != 0)
                 {
-                    instructionPointer = getValueFromMode(puzzleInput, instructionValues[1]);
+                    instructionPointer = getValueFromMode(instructions[1]);
                 }
                 return;
             case Constants.BNE:
-                firstInt = getValueFromMode(puzzleInput, instructionValues[0]);
-                if (firstInt == 0)
+                if (getValueFromMode(instructions[0]) == 0)
                 {
-                    instructionPointer = getValueFromMode(puzzleInput, instructionValues[1]);
+                    instructionPointer = getValueFromMode(instructions[1]);
                 }
                 return;
             case Constants.SLT:
-                firstInt = getValueFromMode(puzzleInput, instructionValues[0]);
-                secondInt = getValueFromMode(puzzleInput, instructionValues[1]);
-                puzzleInput[instructionValues[2].Item1] = (firstInt < secondInt) ? 1 : 0;
+                puzzleInput[instructions[2].Item1] = (getValueFromMode(instructions[0]) < getValueFromMode(instructions[1])) ? 1 : 0;
                 break;
             case Constants.SET_ON_EQUAL:
-                firstInt = getValueFromMode(puzzleInput, instructionValues[0]);
-                secondInt = getValueFromMode(puzzleInput, instructionValues[1]);
-                puzzleInput[instructionValues[2].Item1] = (firstInt == secondInt) ? 1 : 0;
+                puzzleInput[instructions[2].Item1] = (getValueFromMode(instructions[0]) == getValueFromMode(instructions[1])) ? 1 : 0;
                 break;
             default:
                 throw new Exception("Unrecognised input");
         }
     }
 
-    int getValueFromMode(List<int> inputNums, Tuple<int, int> input)
+    int getValueFromMode(Tuple<int, int> input)
     {
-        return (input.Item2 == 0) ? inputNums[input.Item1] : input.Item1;
+        return (input.Item2 == 0) ? puzzleInput[input.Item1] : input.Item1;
     }
 
     void incrementInstructionPointer(int instructionLength)

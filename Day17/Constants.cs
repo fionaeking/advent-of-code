@@ -10,4 +10,6 @@ class Constants {
     public const int SET_ON_EQUAL = 8;
     public const int RELATIVE_BASE = 9;
     public const int END_OF_PROGRAM = 99;
+
+    public const char SCAFFOLD = '#';
 }

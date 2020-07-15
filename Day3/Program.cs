@@ -69,20 +69,19 @@ namespace Day3
             }
 
             int A1 = B.Item2 - A.Item2;
-            int B1 = A.Item1 - B.Item1;
-            int C1 = A1 * A.Item1 + B1 * A.Item2;
-
             int A2 = D.Item2 - C.Item2;
+            int B1 = A.Item1 - B.Item1;
             int B2 = C.Item1 - D.Item1;
-            int C2 = A2 * C.Item1 + B2 * C.Item2;
-
             int delta = A1 * B2 - A2 * B1;
+
             if (delta == 0)
             {
                 return null;
             }
             else
             {
+                int C1 = A1 * A.Item1 + B1 * A.Item2;
+                int C2 = A2 * C.Item1 + B2 * C.Item2;
                 int x = (B2 * C1 - B1 * C2) / delta;
                 int y = (A1 * C2 - A2 * C1) / delta;
                 return ((x == 0 & y == 0) | x < 0 | y < 0) ? null : Tuple.Create(x, y);

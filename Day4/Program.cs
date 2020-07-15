@@ -62,26 +62,26 @@ namespace Day4
 
         static bool checkAdjDigitsSame(List<int> inputNum)
         {
-            for (int i = 0; i < 5; i++)
+            for (int digit = 0; digit < 5; digit++)
             {
-                if (inputNum[i] == inputNum[i + 1])
+                if (inputNum[digit] == inputNum[digit + 1])
                 {
-                    switch (i)
+                    switch (digit)
                     {
                         case 0:
-                            if (inputNum[i] != inputNum[i + 2])
+                            if (inputNum[digit] != inputNum[digit + 2])
                             {
                                 return true;
                             }
                             break;
                         case 4:
-                            if (inputNum[i] != inputNum[i - 1])
+                            if (inputNum[digit] != inputNum[digit - 1])
                             {
                                 return true;
                             }
                             break;
                         default:
-                            if ((inputNum[i] != inputNum[i + 2]) && (inputNum[i] != inputNum[i - 1]))
+                            if ((inputNum[digit] != inputNum[digit + 2]) && (inputNum[digit] != inputNum[digit - 1]))
                             {
                                 return true;
                             }
