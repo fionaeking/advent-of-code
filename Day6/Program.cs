@@ -30,7 +30,6 @@ namespace Day6
                 {
                     Console.WriteLine(val);
                 }
-
             }*/
             findCommonParent(Constants.SAN, Constants.YOU, orbitingObjects);
         }
@@ -90,16 +89,14 @@ namespace Day6
 
         static string findParent(string one, Dictionary<string, List<string>> orbits)
         {
-            var parent = "";
-            foreach (string key in orbits.Keys)
+            foreach (string parent in orbits.Keys)
             {
-                if (orbits[key].Contains(one))
+                if (orbits[parent].Contains(one))
                 {
-                    parent = key;
+                    return parent;
                 }
             }
-            //Console.WriteLine("Parent for " + one + ": " + parent);
-            return parent;
+            return "";
         }
 
     }

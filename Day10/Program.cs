@@ -18,7 +18,7 @@ namespace Day10
             var currAsteroidCount = 0;
             var prevAsteroidCount = 0;
             List<KeyValuePair<double, Tuple<int, int>>> listAnglesOrdered = new List<KeyValuePair<double, Tuple<int, int>>>();
-            while (currAsteroidCount<=200)
+            while (currAsteroidCount<=Constants.VAPOURISED_ASTEROID_NUM)
             {
                 var astrAngleDict = new Dictionary<double, Tuple<int, int>>();
                 foreach (var asteroid in astrList)
@@ -54,7 +54,7 @@ namespace Day10
             {
                 for (int charCount = 0; charCount<line.Length; charCount++)
                 {
-                    if(line[charCount]=='#')
+                    if(line[charCount]==Constants.ASTEROID)
                     {
                         astrList.Add(new Tuple<int, int>(charCount, lineCount));
                     }
