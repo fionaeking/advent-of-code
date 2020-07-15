@@ -47,9 +47,8 @@ class Intcode
 
     int getOpcode()
     {
-        long instruction = puzzleInput[instructionPointer];
-        // Return opcode (last 2 digits)
-        return Convert.ToInt32(instruction % 100);
+        // Return opcode (last 2 digits of instruction)
+        return Convert.ToInt32(puzzleInput[instructionPointer] % 100);
     }
 
     int checkInstruction(int opcode)
