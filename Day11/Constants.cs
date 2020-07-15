@@ -1,4 +1,5 @@
-static class Constants {
+static class Constants 
+{
     public const string INPUT_FILENAME = "InputList.csv";
 
     public const int UPZERO = 0;
